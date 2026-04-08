@@ -658,6 +658,240 @@ frontend:
 
 ---
 
+## 📦 Git 仓库与版本控制
+
+### 仓库信息
+
+| 项目 | 地址 |
+|------|------|
+| **远程仓库** | https://github.com/phuong0944298660-code/HaoExamPlatform.git |
+| **本地路径** | `Jieli Education Smart Cloud Platform/` |
+
+### 分支策略
+
+采用 **Git Flow 简化版** 分支模型：
+
+```
+Develop (开发) → UAT (预上线) → Main (生产)
+     ↑
+  feature/* (功能分支)
+```
+
+| 分支 | 用途 | 部署环境 | 保护级别 |
+|------|------|----------|----------|
+| `Main` | 生产代码 | 生产环境 | 🔒 禁止直接推送，仅允许 PR 合并 |
+| `UAT` | 预发布测试 | 预上线环境 | 🔒 禁止直接推送，仅允许从 Develop 合并 |
+| `Develop` | 开发集成 | 开发环境 | ⚠️ 需要审查后可推送 |
+| `feature/*` | 功能开发 | 本地 | ✅ 可自由推送 |
+
+---
+
+## ⚠️ 代码推送规范（重要）
+
+### 必须遵守的规则
+
+**推送到远程仓库前，必须获得用户明确许可。**
+
+以下操作需要用户授权：
+
+| 操作 | 授权要求 | 备注 |
+|------|----------|------|
+| `git push` | ✅ 必须显式批准 | 每次推送前询问用户 |
+| `git push --force` | ⚠️ 双重确认 | 强制推送风险极高，需特别授权 |
+| 推送到 `Main` | 🔒 严格禁止自动推送 | 仅通过 PR + 审查合并 |
+| 推送到 `UAT` | 🔒 禁止自动推送 | 仅通过 PR 从 Develop 合并 |
+| 创建/删除远程分支 | ✅ 需用户确认 | 告知用户分支变更影响 |
+
+### 推送内容说明要求（必须）
+
+**每次推送前，必须向用户详细说明以下内容，并确保这些内容写入 git commit message：**
+
+| 说明项 | 内容要求 | 写入位置 |
+|--------|----------|----------|
+| **修改背景** | 为什么要做这个修改？（问题来源、需求背景、Bug 报告等） | Commit message body |
+| **修改目的** | 期望达到什么效果？（解决什么问题、新增什么功能） | Commit message body |
+| **修改内容** | 具体改了哪些文件？哪些功能？（文件清单 + 功能说明） | Commit message body |
+| **影响范围** | 是否影响其他模块？是否有破坏性变更？ | Commit message body |
+| **测试情况** | 是否已本地测试？测试结果如何？ | Commit message body |
+
+**Commit Message 标准模板：**
+
+```
+<type>(<scope>): <简洁标题>
+
+【背景】
+xxx（例如：用户反馈激活计划页面加载缓慢 / 需要新增批量导入功能）
+
+【目的】
+xxx（例如：优化查询性能，将加载时间从 3s 降低到 500ms）
+
+【修改内容】
+- 文件1：修改说明（例如：ActivationPlans.vue - 优化表格渲染逻辑）
+- 文件2：修改说明（例如：activation.ts - 新增批量导入 API）
+
+【影响范围】
+xxx（例如：仅影响激活计划模块，不影响其他功能）
+
+【测试情况】
+xxx（例如：已本地测试，功能正常，性能提升明显）
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
+
+**示例：**
+
+```
+feat(activation): 优化激活计划列表加载性能
+
+【背景】
+用户反馈激活计划页面在数据量大时加载缓慢，影响使用体验。
+
+【目的】
+优化查询性能，将加载时间从 3s 降低到 500ms 以内。
+
+【修改内容】
+- ActivationPlans.vue：优化表格渲染逻辑，添加虚拟滚动
+- activation.ts：新增分页查询参数，减少单次请求数据量
+
+【影响范围】
+仅影响激活计划列表页面，不影响编辑、创建等其他功能。
+
+【测试情况】
+已本地测试，1000 条数据下加载时间从 3.2s 降至 450ms。
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
+
+### 推送前检查清单
+
+执行推送前必须确认：
+
+- [ ] 用户已明确同意推送
+- [ ] 代码已提交并包含清晰的 commit message
+- [ ] 本地测试通过（如有测试命令）
+- [ ] 目标分支正确（避免误推送到 Main/UAT）
+- [ ] 未包含敏感信息（密码、密钥等）
+
+### Commit Message 规范
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
+
+**类型 (type)：**
+- `feat`: 新功能
+- `fix`: 修复
+- `docs`: 文档
+- `style`: 格式（不影响代码运行）
+- `refactor`: 重构
+- `test`: 测试
+- `chore`: 构建过程或辅助工具变动
+
+---
+
+## 🔧 Git 工作流指南
+
+### 功能开发流程
+
+```bash
+# 1. 从 Develop 创建功能分支
+git checkout Develop
+git pull origin Develop
+git checkout -b feature/new-feature
+
+# 2. 开发并提交
+git add .
+git commit -m "feat(activation): add plan validation"
+
+# 3. 推送到远程（需用户授权）
+git push -u origin feature/new-feature
+
+# 4. 创建 PR 合并到 Develop（用户操作）
+```
+
+### 环境晋升流程
+
+```
+feature/new-feature → Develop → UAT → Main
+        ↓                ↓        ↓       ↓
+     功能完成         开发完成   测试通过  生产发布
+```
+
+**各阶段检查点：**
+
+| 阶段 | 检查项 | 负责人 |
+|------|--------|--------|
+| Develop → UAT | 代码审查、单元测试通过 | 技术负责人 |
+| UAT → Main | UAT 验收通过、无阻塞 Bug | 产品经理 |
+| Main 发布 | 生产验证、回滚方案就绪 | 运维团队 |
+
+---
+
+## 💡 技术专家建议
+
+### 分支保护配置（推荐）
+
+在 GitHub 仓库设置中启用以下保护：
+
+1. **Main 分支保护**
+   - ✅ 需要 PR 才能合并
+   - ✅ 需要至少 1 人审查批准
+   - ✅ 需要通过 CI 检查
+   - ✅ 禁止强制推送
+   - ✅ 禁止直接删除
+
+2. **UAT 分支保护**
+   - ✅ 需要 PR 才能合并
+   - ✅ 仅允许从 Develop 分支合并
+   - ✅ 禁止强制推送
+
+3. **Develop 分支保护**
+   - ⚠️ 建议启用 PR 审查（可选）
+   - ⚠️ 允许维护者直接推送（方便紧急修复）
+
+### CI/CD 建议
+
+配置 GitHub Actions 实现自动化：
+
+```yaml
+# 建议的 CI 流程
+1. PR 创建时：运行单元测试、代码检查
+2. 合并到 Develop：部署到开发环境
+3. 合并到 UAT：部署到预上线环境
+4. 合并到 Main：自动打标签、部署到生产
+```
+
+### 版本发布流程
+
+采用 [语义化版本](https://semver.org/)（Semantic Versioning）：
+
+```
+版本号格式：MAJOR.MINOR.PATCH
+
+MAJOR：不兼容的 API 修改
+MINOR：向下兼容的功能新增
+PATCH：向下兼容的问题修复
+```
+
+**发布步骤：**
+1. 从 Main 创建 `release/v1.2.0` 分支
+2. 更新版本号、CHANGELOG
+3. 合并到 Main 并打标签 `v1.2.0`
+4. 合并回 Develop
+
+### 安全建议
+
+- 🔐 不要将 `.env` 文件提交到仓库
+- 🔐 不要将敏感配置（密码、密钥）硬编码
+- 🔐 定期审查 `.gitignore` 确保敏感文件被排除
+- 🔐 启用 GitHub 的 Dependabot 自动检测依赖漏洞
+
+---
+
 ## 🚀 审计任务 (Audit Task List)
 
 请严格参照 `docs/guides/DETAILED_TEST_TODO_AND_PROCEDURES.md` 执行以下 13 阶段审计：
@@ -683,5 +917,6 @@ frontend:
 ---
 
 **最后更新**: 2026-04-08
+**Git 仓库**: https://github.com/phuong0944298660-code/HaoExamPlatform
 **版本**: Java/Spring Boot RBAC 2.0 优化版
 **迁移状态**: ✅ 从Python FastAPI完全迁移到Java Spring Boot
