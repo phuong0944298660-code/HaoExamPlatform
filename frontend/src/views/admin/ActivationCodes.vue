@@ -2,10 +2,7 @@
   <!-- 激活码管理页面 -->
   <div class="activation-codes-page">
     <!-- Tab切换 -->
-    <a-tabs v-model:activeKey="activeTab" class="page-tabs">
-      <a-tab-pane key="codes" tab="激活码管理">
-        <!-- 页面标题 -->
-        <div class="page-header">
+    <div class="page-header">
           <h2>激活码管理</h2>
           <a-space>
             <a-button type="primary" @click="handleGenerate">
@@ -211,13 +208,6 @@
             </template>
           </a-table>
         </a-card>
-      </a-tab-pane>
-
-      <!-- 激活计划管理Tab -->
-      <a-tab-pane key="plans" tab="激活计划管理">
-        <ActivationPlans />
-      </a-tab-pane>
-    </a-tabs>
 
     <!-- 批量生成激活码弹窗 -->
     <a-modal
@@ -345,7 +335,6 @@ import {
   batchGenerateCodes,
   revokeActivationCode,
 } from '@/api/activations'
-import ActivationPlans from './ActivationPlans.vue'
 
 // ==================== 图标组件 ====================
 
@@ -472,9 +461,6 @@ const columns = [
 ]
 
 // ==================== 响应式数据 ====================
-
-/** Tab当前选中 */
-const activeTab = ref('codes')
 
 /** 加载状态 */
 const loading = ref(false)
@@ -831,10 +817,6 @@ onMounted(() => {
 .activation-codes-page {
   padding: 24px;
 
-  .page-tabs {
-    margin-bottom: 16px;
-  }
-
   .page-header {
     display: flex;
     justify-content: space-between;
@@ -892,7 +874,7 @@ onMounted(() => {
       :deep(.anticon-copy) {
         margin-left: 8px;
         cursor: pointer;
-        
+
         &:hover {
           color: #40a9ff;
         }

@@ -1052,3 +1052,46 @@ async def apply_data_scope(query, user_id: int):
 
 *文档版本: v1.0*  
 *更新日期: 2026-03-24*
+
+---
+
+## 7. 项目仓库与交付规范
+
+### 7.1 Git 仓库信息
+
+| 项目 | 内容 |
+|------|------|
+| **远程仓库** | https://github.com/phuong0944298660-code/HaoExamPlatform.git |
+| **开发分支** | `Develop` |
+| **预发布分支** | `UAT` |
+| **生产分支** | `Main` |
+
+### 7.2 分支晋升流程
+
+```
+feature/* → Develop → UAT → Main
+   ↓           ↓        ↓       ↓
+功能开发    开发集成   预发布   生产环境
+```
+
+**交付检查清单：**
+
+| 阶段 | 检查项 | 状态 |
+|------|--------|------|
+| Develop 交付 | 功能完成、本地测试通过 | ☐ |
+| UAT 交付 | 代码审查通过、无阻塞 Bug | ☐ |
+| Main 交付 | UAT 验收通过、生产就绪 | ☐ |
+
+### 7.3 代码推送规范
+
+⚠️ **重要**：所有推送到远程仓库的操作必须获得明确授权。
+
+- 禁止自动推送到 `Main` 和 `UAT` 分支
+- 推送到远程仓库前需用户确认
+- Commit message 需遵循规范：`type(scope): description`
+
+---
+
+*文档版本: v1.1*  
+*更新日期: 2026-04-08*  
+*Git 仓库: https://github.com/phuong0944298660-code/HaoExamPlatform*

@@ -150,11 +150,7 @@
       <!-- 页面内容 -->
       <a-layout-content class="content">
         <div class="page-container">
-          <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" :key="route.fullPath" />
-            </transition>
-          </router-view>
+          <router-view :key="route.fullPath" />
         </div>
       </a-layout-content>
 
@@ -432,12 +428,24 @@ function closeTab(path: string) {
 // 菜单点击
 function onMenuClick({ key }: { key: string }) {
   console.log('[AdminLayout] Menu clicked:', key, 'Current route:', route.path)
+
+  // 检查是否是有效路由
+  const routeMatch = router.resolve(key)
+  console.log(routeMatch)
+  if (!routeMatch || routeMatch.name === undefined) {
+    console.error('[AdminLayout] 无效的路由:', key)
+    message.error('该功能暂未配置，请联系管理员')
+    return
+  }
+
   if (key === route.path) {
     console.log('[AdminLayout] Already on this page, skipping push')
     return
   }
+
   router.push(key).catch(err => {
     console.error('[AdminLayout] Navigation failed:', err)
+    message.error('页面跳转失败，请稍后重试')
   })
 }
 
