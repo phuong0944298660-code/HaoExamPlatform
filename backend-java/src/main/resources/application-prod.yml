@@ -1,0 +1,184 @@
+# =============================================================
+# 接力教育智慧云平台 - 生产环境配置
+# =============================================================
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    max-connections: 10000
+    accept-count: 100
+    connection-timeout: 20000
+
+spring:
+  application:
+    name: jieli-education
+
+  # 数据源配置
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/jieli_edu?useSSL=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: JieliHikariPool
+      minimum-idle: 10
+      maximum-pool-size: 50
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+  
+  # JPA/Hibernate 配置
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+  
+  # Redis 配置
+  redis:
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: ${SPRING_REDIS_PORT:6379}
+    password: ${SPRING_REDIS_PASSWORD:}
+    database: ${SPRING_REDIS_DATABASE:0}
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 20
+        min-idle: 5
+        max-wait: 3000ms
+      shutdown-timeout: 100ms
+  
+  # 缓存配置
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "jieli:cache:"
+  
+  # Servlet 配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: ${FILE_MAX_SIZE:104857600}
+      max-request-size: ${FILE_MAX_SIZE:104857600}
+      file-size-threshold: 2KB
+      location: ${java.io.tmpdir}
+  
+  # 消息转换
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+    time-zone: Asia/Shanghai
+    locale: zh_CN
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.jieli: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: ${LOG_PATH:./logs}/jieli-education.log
+    max-size: 100MB
+    max-history: 30
+    total-size-cap: 1GB
+
+# 应用自定义配置
+app:
+  # JWT 配置
+  jwt:
+    secret: ${JWT_SECRET:change-this-to-a-secure-random-string-for-production}
+    expiration: ${JWT_EXPIRATION:86400000}
+    header: Authorization
+    prefix: Bearer
+  
+  # 文件上传配置
+  upload:
+    path: ${FILE_UPLOAD_PATH:./uploads}
+    allowed-types: pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,zip,rar,mp4,mp3
+    max-size: ${FILE_MAX_SIZE:104857600}
+  
+  # CORS 配置
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,X-Total-Count,X-Page-Count"
+    allow-credentials: false
+    max-age: 3600
+  
+  # 分页配置
+  pagination:
+    default-page-size: 20
+    max-page-size: 100
+  
+  # 安全配置
+  security:
+    public-paths:
+      - /api/v1/auth/**
+      - /api/v1/public/**
+      - /uploads/**
+      - /actuator/health
+      - /actuator/info
+    rate-limit:
+      enabled: true
+      capacity: 100
+      refill-rate: 10
+
+# Actuator 监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+      show-components: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
+# SpringDoc OpenAPI
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

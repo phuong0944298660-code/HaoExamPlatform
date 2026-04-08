@@ -1,0 +1,141 @@
+{
+  "status": "completed",
+  "scenario": "question-bank",
+  "timestamp": "2026-03-24T14:30:00+08:00",
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5,
+    "skipped": 0,
+    "pass_rate": "50%"
+  },
+  "passed_tests": [
+    {
+      "id": "TC-006-001",
+      "name": "页面整体布局验证",
+      "description": "验证题库列表页面整体布局"
+    },
+    {
+      "id": "TC-006-003",
+      "name": "筛选区域像素验证",
+      "description": "验证搜索和筛选区域布局"
+    },
+    {
+      "id": "TC-007-002",
+      "name": "题目表单元素尺寸验证",
+      "description": "验证创建题目表单元素尺寸"
+    },
+    {
+      "id": "TC-007-003",
+      "name": "选项区域像素验证",
+      "description": "验证选项区域布局和样式"
+    },
+    {
+      "id": "TC-007-004",
+      "name": "题型选择器像素验证",
+      "description": "验证题型切换功能"
+    }
+  ],
+  "failed_tests": [
+    {
+      "id": "TC-006-002",
+      "name": "页面头部像素验证",
+      "error": "期望的.ant-page-header-title元素不存在",
+      "details": "页面使用了不同的标题组件结构",
+      "screenshot": "test-results/question-bank-TC-006-题库列表页面像素验证-页面头部像素验证-chromium/test-failed-1.png"
+    },
+    {
+      "id": "TC-006-004",
+      "name": "表格区域像素验证",
+      "error": "背景颜色期望值不匹配",
+      "expected": "rgb(250, 250, 250)",
+      "actual": "rgba(0, 0, 0, 0)",
+      "screenshot": "test-results/question-bank-TC-006-题库列表页面像素验证-表格区域像素验证-chromium/test-failed-1.png"
+    },
+    {
+      "id": "TC-006-005",
+      "name": "分页器像素验证",
+      "error": "justifyContent值不匹配",
+      "expected": "normal",
+      "actual": "flex-end"
+    },
+    {
+      "id": "TC-006-006",
+      "name": "题库列表页面视觉回归",
+      "error": "无基准截图",
+      "note": "首次运行，已生成基准截图 teacher-question-banks-list-actual.png"
+    },
+    {
+      "id": "TC-007-001",
+      "name": "单选题创建表单像素验证",
+      "error": "标签对齐方式不匹配",
+      "expected": "right",
+      "actual": "start"
+    }
+  ],
+  "issues": [
+    {
+      "type": "element_not_found",
+      "severity": "medium",
+      "message": "页面头部验证失败：.ant-page-header-title 元素不存在",
+      "suggestion": "检查页面实际使用的标题组件结构"
+    },
+    {
+      "type": "css_mismatch",
+      "severity": "low",
+      "message": "表格表头背景颜色期望值与实际值不匹配",
+      "expected": "rgb(250, 250, 250)",
+      "actual": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "type": "css_mismatch",
+      "severity": "low",
+      "message": "分页器对齐方式期望值与实际值不匹配",
+      "expected": "normal",
+      "actual": "flex-end"
+    },
+    {
+      "type": "baseline_missing",
+      "severity": "info",
+      "message": "视觉回归测试缺少基准截图",
+      "suggestion": "首次运行已生成基准，后续运行将进行对比"
+    },
+    {
+      "type": "css_mismatch",
+      "severity": "low",
+      "message": "表单标签对齐方式期望值与实际值不匹配",
+      "expected": "right",
+      "actual": "start"
+    }
+  ],
+  "artifacts": {
+    "screenshots": [
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-页面头部像素验证-chromium/test-failed-1.png",
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-表格区域像素验证-chromium/test-failed-1.png",
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-题库列表页面视觉回归-chromium/teacher-question-banks-list-actual.png",
+      "e2e/test-results/question-bank-TC-007-创建题目表单像素验证-单选题创建表单像素验证-chromium/test-failed-1.png"
+    ],
+    "videos": [
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-页面头部像素验证-chromium/video.webm",
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-表格区域像素验证-chromium/video.webm"
+    ],
+    "traces": [
+      "e2e/test-results/question-bank-TC-006-题库列表页面像素验证-页面头部像素验证-chromium-retry1/trace.zip"
+    ]
+  },
+  "environment": {
+    "browser": "Chromium",
+    "viewport": "1280x720",
+    "base_url": "http://localhost:5173",
+    "test_data": {
+      "teacher_account": "teacher",
+      "teacher_password": "password"
+    }
+  },
+  "notes": [
+    "测试环境已修复：数据库ENUM值已修正，测试账号已创建",
+    "由于bcrypt版本兼容性问题，使用JWT Token直接设置登录状态绕过登录表单",
+    "5个测试通过，5个测试失败，主要由于CSS期望值与实际UI实现不匹配",
+    "视觉回归测试需要先生成基准截图"
+  ]
+}

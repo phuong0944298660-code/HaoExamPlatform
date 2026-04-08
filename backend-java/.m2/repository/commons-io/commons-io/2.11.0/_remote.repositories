@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Mar 31 11:27:07 CST 2026
+commons-io-2.11.0.pom>aliyun=
+commons-io-2.11.0.jar>aliyun-plugin=
+commons-io-2.11.0.jar>aliyun=

@@ -1,0 +1,52 @@
+# 测试环境配置
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS PUBLIC
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        # 禁用索引自动创建以避免重复索引错误
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor
+  
+  h2:
+    console:
+      enabled: true
+
+  # 禁用Redis（测试环境使用内存缓存）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 1
+  cache:
+    type: simple
+
+# 文件上传配置
+file:
+  upload:
+    path: /tmp/jieli-test-uploads
+    max-size: 10485760  # 10MB
+
+# JWT配置
+jwt:
+  secret: test-secret-key-for-testing-only-do-not-use-in-production
+  expiration: 86400000
+
+# 日志
+logging:
+  level:
+    com.jieliedu.platform: DEBUG
+    org.springframework.security: DEBUG

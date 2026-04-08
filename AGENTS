@@ -1,0 +1,61 @@
+# AGENTS - Jieli Education Smart Cloud Platform Agent Instructions
+
+This file provides core instructions and context for AI agents working on the Jieli Education Smart Cloud Platform. Use this as your primary directive for development, testing, and auditing tasks.
+
+## 🎯 Project Mission
+Complete the **13-Stage Functional Audit** to ensure the platform is production-ready for the Guangxi Beibu Gulf AI Competition (WanSai).
+
+## 🏗️ System Architecture (v1.0 Java)
+- **Backend**: Java 17 + Spring Boot 3.2.x (Migrated from Python FastAPI)
+- **Frontend**: Vue 3 + TypeScript + Vite + Ant Design Vue 4
+- **Database**: MySQL 8.0 (Spring Data JPA)
+- **Cache/Session**: Redis 7
+- **Deployment**: Docker Compose (5 Core Services: `backend`, `frontend`, `db`, `redis`, `nginx`)
+- **API Base**: `http://localhost:8080/api/v1` (Backend) / `http://localhost` (Nginx Proxy)
+
+## 🛠️ Core Agent Directives
+
+### 1. Development Standards
+- **Language**: UI & Business Logic in Chinese; Code/Comments mixed.
+- **Backend Pattern**: Controller -> Service -> Repository -> Entity/DTO.
+- **Database**: Use `@Version` for optimistic locking. Decimals for scores.
+- **Security**: JWT (24h expiry) + BCrypt + Role-based access (ADMIN, TEACHER, STUDENT).
+
+### 2. Testing & Audit Workflow
+Follow the `DETAILED_TEST_TODO_AND_PROCEDURES.md` precisely:
+- **Phase 1-2**: Infrastructure & Auth (Verified ✅)
+- **Phase 3-4**: Question CRUD & Activation Plans (In Progress 🔄)
+- **Phase 5-13**: RBAC, Exams, Anti-Cheat, Performance (Pending ⏳)
+
+### 3. Critical Fixes & Lessons
+- **Port Conflict**: Backend is on **8080**, Frontend dev on **5173**, Nginx on **80**.
+- **Redis Connection**: Always use `spring.redis.host=${SPRING_REDIS_HOST:localhost}` for Docker compatibility.
+- **Database Schema**: Questions table requires `grade_group` and `status` columns.
+- **Admin Login**: `admin` / `admin123`.
+
+### 4. Common Commands
+```bash
+# Start System
+docker-compose up -d --build
+
+# Backend Logs
+docker-compose logs -f backend
+
+# Run Backend Tests
+cd backend-java && ./mvnw test
+
+# Run E2E Agents
+cd e2e && npm run test:agents
+```
+
+## 📋 Production Readiness Checklist
+- [ ] 100% Functional Audit Completion
+- [ ] Redis Stability (Multi-device kick-out)
+- [ ] Exam Snapshot Integrity
+- [ ] Anti-Cheat Sensitivity Calibration
+- [ ] Excel/PDF Score Export Verification
+
+---
+**Last Updated**: 2026-04-01
+**Status**: Java Migration Complete | Audit in Progress
+**Agent Role**: Senior Systems Auditor & Developer

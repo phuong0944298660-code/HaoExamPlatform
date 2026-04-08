@@ -1,0 +1,124 @@
+# =============================================================
+# 接力教育智慧云平台 - 本地快速启动配置 (H2内存数据库 + 嵌入式Redis)
+# =============================================================
+
+server:
+  port: 8083
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: jieli-education
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: servlet
+
+  # 数据源配置 - H2内存数据库
+  datasource:
+    url: jdbc:h2:mem:jieli_edu;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;NON_KEYWORDS=USER
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: JieliLocalPool
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+
+  # JPA/Hibernate配置
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  # H2控制台（开发和调试）
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  # Redis配置
+  redis:
+    host: 192.168.30.32
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        min-idle: 2
+
+  # 缓存配置
+  cache:
+    type: redis
+
+  # Servlet配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.jieli: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT配置
+jwt:
+  secret: dev-secret-key-change-in-production
+  expiration: 86400000
+  header: Authorization
+  prefix: Bearer
+
+# 文件上传配置
+app:
+  upload:
+    path: ./uploads
+    allowed-types: pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,zip,rar,mp4,mp3
+    max-size: 52428800
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+    allowed-headers: "*"
+    allow-credentials: false
+    max-age: 3600
+
+# Actuator监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# SpringDoc OpenAPI
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  show-actuator: true

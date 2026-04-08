@@ -1,0 +1,961 @@
+{
+  "config": {
+    "configFile": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright.config.ts",
+    "rootDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "open": "never",
+          "outputFolder": "../test-reports/playwright-report"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../test-reports/playwright-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "../test-reports/e2e-test-report.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 4,
+    "webServer": {
+      "command": "cd ../frontend && npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "登录页面 - Login.vue",
+          "file": "auth.spec.ts",
+          "line": 26,
+          "column": 6,
+          "specs": [
+            {
+              "title": "页面整体布局和样式验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1952,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:36.028Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-页面整体布局和样式验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-7547dbc84d949905f430",
+              "file": "auth.spec.ts",
+              "line": 32,
+              "column": 7
+            },
+            {
+              "title": "登录卡片样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1907,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:36.028Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录卡片样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-310f36b16ec396909111",
+              "file": "auth.spec.ts",
+              "line": 52,
+              "column": 7
+            },
+            {
+              "title": "登录头部标题样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1887,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:36.027Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录头部标题样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-633c8f1838058256824f",
+              "file": "auth.spec.ts",
+              "line": 66,
+              "column": 7
+            },
+            {
+              "title": "登录表单字段验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1900,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:36.030Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录表单字段验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-52382d877f0e3f30d10f",
+              "file": "auth.spec.ts",
+              "line": 85,
+              "column": 7
+            },
+            {
+              "title": "登录按钮样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1104,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:38.917Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录按钮样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-603cc853b1f46e270f6f",
+              "file": "auth.spec.ts",
+              "line": 102,
+              "column": 7
+            },
+            {
+              "title": "底部链接样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 980,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:38.929Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-底部链接样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-069ae739057e38cd3de9",
+              "file": "auth.spec.ts",
+              "line": 120,
+              "column": 7
+            },
+            {
+              "title": "表单验证 - 空值提交",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1729,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:38.936Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-表单验证---空值提交-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-b38adb901c2433a6fa88",
+              "file": "auth.spec.ts",
+              "line": 130,
+              "column": 7
+            },
+            {
+              "title": "登录失败提示验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3299,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:38.981Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录失败提示验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-52d029f17563b5516ae3",
+              "file": "auth.spec.ts",
+              "line": 146,
+              "column": 7
+            },
+            {
+              "title": "登录成功流程 - 管理员",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 26070,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-layout')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-layout')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-layout')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-layout')\u001b[22m\n\n    at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:186:47",
+                        "location": {
+                          "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                          "column": 47,
+                          "line": 186
+                        },
+                        "snippet": "  184 |     \n  185 |     // 验证登录成功\n> 186 |     await expect(page.locator('.ant-layout')).toBeVisible({ timeout: 10000 });\n      |                                               ^\n  187 |   });\n  188 | });\n  189 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                            "column": 47,
+                            "line": 186
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-layout')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-layout')\u001b[22m\n\n\n  184 |     \n  185 |     // 验证登录成功\n> 186 |     await expect(page.locator('.ant-layout')).toBeVisible({ timeout: 10000 });\n      |                                               ^\n  187 |   });\n  188 | });\n  189 |\n    at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:186:47"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Current URL: http://localhost:5173/login\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:39.916Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                        "column": 47,
+                        "line": 186
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-686874c2e734ce2b28d5",
+              "file": "auth.spec.ts",
+              "line": 161,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "激活页面 - Activate.vue",
+          "file": "auth.spec.ts",
+          "line": 190,
+          "column": 6,
+          "specs": [
+            {
+              "title": "页面整体布局验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 894,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:40.031Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-页面整体布局验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-fed99cd85178fb21211d",
+              "file": "auth.spec.ts",
+              "line": 196,
+              "column": 7
+            },
+            {
+              "title": "激活卡片样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 862,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:40.679Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-激活卡片样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-aec02df2893b7829f647",
+              "file": "auth.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "页面标题样式",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 840,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:40.933Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-页面标题样式-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-59db05f1b0c297b8d651",
+              "file": "auth.spec.ts",
+              "line": 218,
+              "column": 7
+            },
+            {
+              "title": "激活码输入框验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 839,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:41.549Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-激活码输入框验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-da101b2a6bde8aa2e0cf",
+              "file": "auth.spec.ts",
+              "line": 225,
+              "column": 7
+            },
+            {
+              "title": "账号类型单选按钮验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 874,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:41.781Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-账号类型单选按钮验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-0ac31176fa0665db5b30",
+              "file": "auth.spec.ts",
+              "line": 235,
+              "column": 7
+            },
+            {
+              "title": "动态账号输入框切换",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1238,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:42.292Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-动态账号输入框切换-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-25ae274c82ec8b2165f5",
+              "file": "auth.spec.ts",
+              "line": 250,
+              "column": 7
+            },
+            {
+              "title": "密码输入框验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 896,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:42.394Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-密码输入框验证-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-3147f6817d8b319fcb9c",
+              "file": "auth.spec.ts",
+              "line": 266,
+              "column": 7
+            },
+            {
+              "title": "按钮组样式验证",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 5873,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button.ant-btn-primary').filter({ hasText: /激活/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.ant-btn-primary').filter({ hasText: /激活/ })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button.ant-btn-primary').filter({ hasText: /激活/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.ant-btn-primary').filter({ hasText: /激活/ })\u001b[22m\n\n    at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:275:31",
+                        "location": {
+                          "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                          "column": 31,
+                          "line": 275
+                        },
+                        "snippet": "  273 |     // 激活按钮 - 使用更灵活的选择器\n  274 |     const activateBtn = page.locator('button.ant-btn-primary').filter({ hasText: /激活/ });\n> 275 |     await expect(activateBtn).toBeVisible();\n      |                               ^\n  276 |     \n  277 |     // 返回登录按钮\n  278 |     const backBtn = page.locator('button').filter({ hasText: '返回登录' });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                            "column": 31,
+                            "line": 275
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button.ant-btn-primary').filter({ hasText: /激活/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.ant-btn-primary').filter({ hasText: /激活/ })\u001b[22m\n\n\n  273 |     // 激活按钮 - 使用更灵活的选择器\n  274 |     const activateBtn = page.locator('button.ant-btn-primary').filter({ hasText: /激活/ });\n> 275 |     await expect(activateBtn).toBeVisible();\n      |                               ^\n  276 |     \n  277 |     // 返回登录按钮\n  278 |     const backBtn = page.locator('button').filter({ hasText: '返回登录' });\n    at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:275:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:42.664Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts",
+                        "column": 31,
+                        "line": 275
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-ac97bcdbe316fd8f5d6a",
+              "file": "auth.spec.ts",
+              "line": 272,
+              "column": 7
+            },
+            {
+              "title": "返回登录按钮跳转",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 990,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-24T05:44:43.298Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/test-results/auth-激活页面---Activate-vue-返回登录按钮跳转-chromium/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-71a3cc0810dbe104c1f0",
+              "file": "auth.spec.ts",
+              "line": 282,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-24T05:44:35.106Z",
+    "duration": 30930.128999999997,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

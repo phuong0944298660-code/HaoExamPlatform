@@ -1,0 +1,239 @@
+# =============================================================================
+# Docker Compose - 测试环境配置
+# 接力教育智慧云平台 - 完整测试环境
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ===========================================================================
+  # 后端测试服务
+  # ===========================================================================
+  backend-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jieli-backend-test
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        sleep 10 &&
+        alembic upgrade head &&
+        python scripts/setup_test_data.py setup &&
+        pytest tests/ -v --tb=short --cov=app --cov-report=xml:/app/reports/backend-coverage.xml --cov-report=html:/app/reports/htmlcov
+      "
+    environment:
+      - APP_ENV=testing
+      - APP_DEBUG=false
+      - DATABASE_URL=mysql+aiomysql://root:rootpass@mysql-test:3306/jieli_edu_test
+      - REDIS_URL=redis://redis-test:6379/0
+      - CELERY_BROKER_URL=redis://redis-test:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis-test:6379/2
+      - JWT_SECRET_KEY=test-secret-key-for-testing-only
+      - TESTING=true
+    volumes:
+      - ./reports:/app/reports
+      - ./tests:/app/tests
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    networks:
+      - jieli-test-network
+    profiles:
+      - full-test
+
+  # ===========================================================================
+  # MySQL 测试数据库
+  # ===========================================================================
+  mysql-test:
+    image: mysql:8.0
+    container_name: jieli-mysql-test
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: jieli_edu_test
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_test_data:/var/lib/mysql
+      - ./scripts/mysql-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - jieli-test-network
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+
+  # ===========================================================================
+  # Redis 测试服务
+  # ===========================================================================
+  redis-test:
+    image: redis:7-alpine
+    container_name: jieli-redis-test
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - jieli-test-network
+
+  # ===========================================================================
+  # Celery Worker 测试服务
+  # ===========================================================================
+  celery-worker-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jieli-celery-worker-test
+    command: celery -A app.core.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      - APP_ENV=testing
+      - DATABASE_URL=mysql+aiomysql://root:rootpass@mysql-test:3306/jieli_edu_test
+      - REDIS_URL=redis://redis-test:6379/0
+      - CELERY_BROKER_URL=redis://redis-test:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis-test:6379/2
+      - JWT_SECRET_KEY=test-secret-key-for-testing-only
+    volumes:
+      - ./app:/app/app
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    networks:
+      - jieli-test-network
+    profiles:
+      - with-celery
+
+  # ===========================================================================
+  # Celery Beat 测试服务
+  # ===========================================================================
+  celery-beat-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jieli-celery-beat-test
+    command: celery -A app.core.celery_app beat --loglevel=info
+    environment:
+      - APP_ENV=testing
+      - DATABASE_URL=mysql+aiomysql://root:rootpass@mysql-test:3306/jieli_edu_test
+      - REDIS_URL=redis://redis-test:6379/0
+      - CELERY_BROKER_URL=redis://redis-test:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis-test:6379/2
+      - JWT_SECRET_KEY=test-secret-key-for-testing-only
+    volumes:
+      - ./app:/app/app
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    networks:
+      - jieli-test-network
+    profiles:
+      - with-celery
+
+  # ===========================================================================
+  # 前端测试服务
+  # ===========================================================================
+  frontend-test:
+    image: node:20-alpine
+    container_name: jieli-frontend-test
+    working_dir: /app
+    command: >
+      sh -c "
+        npm ci &&
+        npm install -D vitest @vue/test-utils happy-dom @vitest/coverage-v8 &&
+        npm run test || true &&
+        npm run build
+      "
+    volumes:
+      - ./frontend:/app
+      - ./reports:/app/reports
+      - frontend_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=test
+      - VITE_API_BASE_URL=http://backend-test:8000/api/v1
+    networks:
+      - jieli-test-network
+    profiles:
+      - full-test
+      - frontend-test
+
+  # ===========================================================================
+  # Playwright E2E 测试服务
+  # ===========================================================================
+  e2e-test:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    container_name: jieli-e2e-test
+    working_dir: /app
+    command: >
+      sh -c "
+        npm ci &&
+        npx playwright install &&
+        npx playwright test --reporter=list,junit
+      "
+    volumes:
+      - ./e2e:/app
+      - ./reports:/app/test-results
+    environment:
+      - CI=true
+      - BASE_URL=http://frontend-test:5173
+    depends_on:
+      - backend-test
+      - frontend-test
+    networks:
+      - jieli-test-network
+    profiles:
+      - e2e-test
+
+  # ===========================================================================
+  # 测试报告服务（可选）
+  # ===========================================================================
+  test-reports:
+    image: nginx:alpine
+    container_name: jieli-test-reports
+    ports:
+      - "8080:80"
+    volumes:
+      - ./reports:/usr/share/nginx/html:ro
+      - ./scripts/nginx-reports.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - jieli-test-network
+    profiles:
+      - reports
+
+# ===========================================================================
+# 网络配置
+# ===========================================================================
+networks:
+  jieli-test-network:
+    driver: bridge
+
+# ===========================================================================
+# 数据卷
+# ===========================================================================
+volumes:
+  mysql_test_data:
+    driver: local
+  redis_test_data:
+    driver: local
+  frontend_node_modules:
+    driver: local

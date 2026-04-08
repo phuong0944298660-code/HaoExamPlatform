@@ -1,0 +1,61 @@
+# AGENTSCN - 接力教育智慧云平台 Agent 执行指南 (中)
+
+本文件是为正在 Jieli Education Smart Cloud Platform 协同工作的 AI Agent 提供的核心指令和上下文摘要。执行开发、审计和测试任务时，请以此为首要指导。
+
+## 🎯 项目使命
+完成 **13阶段浏览器全功能操作审计与验收**，确保平台达到广西北部湾人工智能大赛（湾赛）的生产发布标准。
+
+## 🏗️ 系统架构 (v1.0 Java)
+- **后端**: Java 17 + Spring Boot 3.2.x (已从 Python FastAPI 完全迁移)
+- **前端**: Vue 3 + TypeScript + Vite + Ant Design Vue 4
+- **数据库**: MySQL 8.0 (通过 Spring Data JPA 操作)
+- **缓存/会话**: Redis 7
+- **部署**: Docker Compose (5个核心服务：`backend`, `frontend`, `db`, `redis`, `nginx`)
+- **API 基地址**: `http://localhost:8080/api/v1` (后端) / `http://localhost` (Nginx 代理)
+
+## 🛠️ Agent 核心指令
+
+### 1. 开发标准
+- **语言**: UI、错误消息、业务数据使用**中文**；代码和注释中英文混合。
+- **后端模式**: Controller -> Service -> Repository -> Entity/DTO。
+- **数据库**: 分数使用 `DECIMAL(5,2)` 确保存储精度；使用 `@Version` 实现乐观锁。
+- **安全性**: JWT (24小时过期) + BCrypt 加密 + 基于角色的访问控制 (ADMIN, TEACHER, STUDENT)。
+
+### 2. 测试与审计工作流
+严格遵循 `DETAILED_TEST_TODO_AND_PROCEDURES.md` 的步骤：
+- **第1-2阶段**: 基础设施与认证流程 (已完成 ✅)
+- **第3-4阶段**: 题库 CRUD 与 激活计划管理 (进行中 🔄)
+- **第5-13阶段**: RBAC、考试全流程、防作弊、性能审计 (待执行 ⏳)
+
+### 3. 关键修正与教训
+- **端口管理**: 后端端口为 **8080**, 前端开发端口为 **5173**, Nginx 路由端口为 **80**。
+- **Redis 连接**: 在 Docker 环境中必须使用 `spring.redis.host=${SPRING_REDIS_HOST:localhost}`。
+- **数据库 Schema**: `questions` 表必须包含 `grade_group` 和 `status` 列。
+- **管理员账号**: `admin` / `admin123` (已通过 DataInitializer 自动初始化)。
+
+### 4. 常用命令
+```bash
+# 启动系统并重建
+docker-compose up -d --build
+
+# 查看后端实时日志
+docker-compose logs -f backend
+
+# 运行后端单元测试
+cd backend-java && ./mvnw test
+
+# 执行多 Agent 自动化测试
+cd e2e && npm run test:agents
+```
+
+## 📋 生产就绪检查清单
+- [ ] 13阶段全功能审计 100% 通过
+- [ ] Redis 会话稳定性 (多端互踢机制验证)
+- [ ] 考试试卷快照隔离机制完整性
+- [ ] 防作弊系统 (切屏监测) 灵敏度测试
+- [ ] Excel/PDF 成绩导出格式及异步任务验证
+
+---
+**最后更新**: 2026-04-01
+**状态**: Java 迁移已完成 | 线上功能审计中
+**Agent 角色**: 资深系统审计师 & 开发者 (Antigravity)

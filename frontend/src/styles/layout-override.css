@@ -1,0 +1,64 @@
+/* 全局布局覆盖 - 确保所有页面全宽显示 */
+
+/* 重置Ant Design Vue默认限制 */
+.ant-layout {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.ant-layout-content {
+  width: 100% !important;
+  max-width: none !important;
+  flex: 1 !important;
+}
+
+.ant-layout-sider {
+  flex-shrink: 0 !important;
+}
+
+/* 确保主布局占满视口 */
+.admin-layout,
+.teacher-layout,
+.student-layout {
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: none !important;
+}
+
+/* 内容区域 */
+.admin-layout .main-layout,
+.teacher-layout .main-layout {
+  flex: 1 !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* 页面容器 */
+.page-container {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+/* 表格容器 */
+.ant-table-wrapper {
+  width: 100% !important;
+  overflow-x: auto;
+}
+
+/* 卡片容器 */
+.ant-card {
+  width: 100% !important;
+}
+
+/* 修复内容区域边距 */
+.admin-layout .content,
+.teacher-layout .content,
+.student-layout .content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+}

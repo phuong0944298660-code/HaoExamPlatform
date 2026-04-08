@@ -1,0 +1,197 @@
+<testsuites id="" name="" tests="18" failures="2" skipped="0" errors="0" time="30.930128999999997">
+<testsuite name="auth.spec.ts" timestamp="2026-03-24T05:44:35.373Z" hostname="chromium" tests="18" failures="2" skipped="0" time="54.134" errors="0">
+<testcase name="登录页面 - Login.vue › 页面整体布局和样式验证" classname="auth.spec.ts" time="1.952">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-页面整体布局和样式验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录卡片样式" classname="auth.spec.ts" time="1.907">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录卡片样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录头部标题样式" classname="auth.spec.ts" time="1.887">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录头部标题样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录表单字段验证" classname="auth.spec.ts" time="1.9">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录表单字段验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录按钮样式" classname="auth.spec.ts" time="1.104">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录按钮样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 底部链接样式" classname="auth.spec.ts" time="0.98">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-底部链接样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 表单验证 - 空值提交" classname="auth.spec.ts" time="1.729">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-表单验证---空值提交-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录失败提示验证" classname="auth.spec.ts" time="3.299">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录失败提示验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="登录页面 - Login.vue › 登录成功流程 - 管理员" classname="auth.spec.ts" time="26.07">
+<failure message="auth.spec.ts:161:7 登录成功流程 - 管理员" type="FAILURE">
+<![CDATA[  [chromium] › auth.spec.ts:161:7 › 登录页面 - Login.vue › 登录成功流程 - 管理员 ────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.ant-layout')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('.ant-layout')
+
+
+      184 |     
+      185 |     // 验证登录成功
+    > 186 |     await expect(page.locator('.ant-layout')).toBeVisible({ timeout: 10000 });
+          |                                               ^
+      187 |   });
+      188 | });
+      189 |
+        at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:186:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[Current URL: http://localhost:5173/login
+
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../e2e/test-results/auth-登录页面---Login-vue-登录成功流程---管理员-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 页面整体布局验证" classname="auth.spec.ts" time="0.894">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-页面整体布局验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 激活卡片样式" classname="auth.spec.ts" time="0.862">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-激活卡片样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 页面标题样式" classname="auth.spec.ts" time="0.84">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-页面标题样式-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 激活码输入框验证" classname="auth.spec.ts" time="0.839">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-激活码输入框验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 账号类型单选按钮验证" classname="auth.spec.ts" time="0.874">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-账号类型单选按钮验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 动态账号输入框切换" classname="auth.spec.ts" time="1.238">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-动态账号输入框切换-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 密码输入框验证" classname="auth.spec.ts" time="0.896">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-密码输入框验证-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 按钮组样式验证" classname="auth.spec.ts" time="5.873">
+<failure message="auth.spec.ts:272:7 按钮组样式验证" type="FAILURE">
+<![CDATA[  [chromium] › auth.spec.ts:272:7 › 激活页面 - Activate.vue › 按钮组样式验证 ──────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('button.ant-btn-primary').filter({ hasText: /激活/ })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('button.ant-btn-primary').filter({ hasText: /激活/ })
+
+
+      273 |     // 激活按钮 - 使用更灵活的选择器
+      274 |     const activateBtn = page.locator('button.ant-btn-primary').filter({ hasText: /激活/ });
+    > 275 |     await expect(activateBtn).toBeVisible();
+          |                               ^
+      276 |     
+      277 |     // 返回登录按钮
+      278 |     const backBtn = page.locator('button').filter({ hasText: '返回登录' });
+        at /Users/chockg/Documents/trae_projects/Jieli Education Smart Cloud Platform/e2e/playwright-tests/auth.spec.ts:275:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-按钮组样式验证-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="激活页面 - Activate.vue › 返回登录按钮跳转" classname="auth.spec.ts" time="0.99">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../e2e/test-results/auth-激活页面---Activate-vue-返回登录按钮跳转-chromium/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

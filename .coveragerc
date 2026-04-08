@@ -1,0 +1,103 @@
+# =============================================================================
+# Coverage 配置文件
+# 接力教育智慧云平台 - 代码覆盖率配置
+# =============================================================================
+
+[run]
+# 分支覆盖率
+branch = True
+
+# 源代码目录
+source = 
+    app
+
+# 省略的文件/目录
+omit = 
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.env/*
+    */migrations/*
+    */alembic/*
+    app/main.py
+    app/core/config.py
+
+# 并行模式（用于多进程测试）
+parallel = False
+
+# 动态上下文
+# context = ${CONTEXT}
+
+[report]
+# 精度
+precision = 2
+
+# 显示缺失的行
+show_missing = True
+
+# 跳过已覆盖的文件
+skip_covered = False
+
+# 排序
+sort = Cover
+
+# 排除行正则
+exclude_lines =
+    # 忽略 pragma: no cover
+    pragma: no cover
+    # 忽略 defensive code
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    # 忽略类型检查代码
+    if TYPE_CHECKING:
+    # 忽略抽象方法
+    @(abc\.)?abstractmethod
+    # 忽略 pass
+    pass
+    # 忽略省略号
+    \.\.\.
+    # 忽略日志
+    logger\.
+    LOGGER\.
+
+# 失败阈值（可选）
+# fail_under = 80
+
+[html]
+# HTML 报告目录
+directory = reports/htmlcov
+
+# 标题
+title = 接力教育智慧云平台 - 代码覆盖率报告
+
+# 样式
+extra_css = 
+
+# 显示上下文
+show_contexts = False
+
+[xml]
+# XML 报告文件
+output = reports/backend-coverage.xml
+
+# 包名称
+package = app
+
+[json]
+# JSON 报告文件
+output = reports/coverage.json
+
+# 格式化
+pretty_print = True
+
+[paths]
+# 路径映射（用于不同环境下的路径统一）
+source =
+    app/
+    /app/app/
+    */app/

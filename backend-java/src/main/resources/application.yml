@@ -1,0 +1,48 @@
+# =============================================================
+# 接力教育智慧云平台 - 主配置文件
+# =============================================================
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  
+  application:
+    name: jieli-education
+  
+  # 默认数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  
+  # 默认 JPA 配置
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Shanghai
+  
+  # 默认 Jackson 配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  
+  # 默认消息配置
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    cache-duration: 3600
+
+# 默认服务器配置
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# 默认日志配置
+logging:
+  charset:
+    console: UTF-8
+    file: UTF-8

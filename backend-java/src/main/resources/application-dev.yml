@@ -1,0 +1,130 @@
+# =============================================================
+# 接力教育智慧云平台 - 开发环境配置
+# =============================================================
+
+server:
+  port: 8083
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: jieli-education
+  
+  main:
+    allow-bean-definition-overriding: true
+  
+  # 数据源配置
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/jieli_edu?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:rootpass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: JieliDevPool
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+  
+  # JPA/Hibernate 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+  
+  # Redis 配置
+  redis:
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: ${SPRING_REDIS_PORT:6379}
+    password: ${SPRING_REDIS_PASSWORD:}
+    database: ${SPRING_REDIS_DATABASE:0}
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        min-idle: 2
+  
+  # 缓存配置
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000
+      cache-null-values: true
+  
+  # Servlet 配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.jieli: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT 配置
+jwt:
+  secret: dev-secret-key-change-in-production
+  expiration: 86400000
+  header: Authorization
+  prefix: Bearer
+
+# 文件上传配置
+file:
+  upload:
+    path: ./uploads
+
+# 应用自定义配置
+app:
+  
+  # 文件上传配置
+  upload:
+    path: ./uploads
+    allowed-types: pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,zip,rar,mp4,mp3
+    max-size: 52428800
+  
+  # CORS 配置
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+    allowed-headers: "*"
+    allow-credentials: false
+    max-age: 3600
+
+# Actuator 监控（开发环境全开）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# SpringDoc OpenAPI（开发环境启用）
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  show-actuator: true

@@ -1,0 +1,61 @@
+{
+  "accounts": {
+    "admin": {
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin"
+    },
+    "teachers": [
+      {
+        "username": "teacher_primary",
+        "password": "teacher123",
+        "name": "小学教师",
+        "grade_group": "primary",
+        "school": "南宁市第一小学"
+      },
+      {
+        "username": "teacher_junior",
+        "password": "teacher123",
+        "name": "初中教师",
+        "grade_group": "junior",
+        "school": "南宁市第一中学"
+      }
+    ],
+    "students": [
+      {
+        "identity_no": "450102201501011234",
+        "password": "123456",
+        "name": "张小北",
+        "grade_group": "primary",
+        "school": "南宁市第一小学"
+      },
+      {
+        "identity_no": "450102201501021234",
+        "password": "123456",
+        "name": "李小南",
+        "grade_group": "primary",
+        "school": "南宁市第一小学"
+      },
+      {
+        "identity_no": "450102201001011234",
+        "password": "123456",
+        "name": "李小明",
+        "grade_group": "junior",
+        "school": "南宁市第一中学"
+      },
+      {
+        "identity_no": "450102201001021234",
+        "password": "123456",
+        "name": "王小华",
+        "grade_group": "junior",
+        "school": "南宁市第一中学"
+      }
+    ]
+  },
+  "activation_codes": [
+    {"code": "PT2024001", "grade_group": "primary", "role": "teacher", "is_used": false},
+    {"code": "PS2024001", "grade_group": "primary", "role": "student", "is_used": false},
+    {"code": "JT2024001", "grade_group": "junior", "role": "teacher", "is_used": false},
+    {"code": "JS2024001", "grade_group": "junior", "role": "student", "is_used": false}
+  ]
+}

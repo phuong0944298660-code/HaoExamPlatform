@@ -1,0 +1,21 @@
+{
+  "name": "jieli-education-e2e",
+  "version": "1.0.0",
+  "description": "接力教育智慧云平台 - E2E测试",
+  "scripts": {
+    "test": "playwright test",
+    "test:paper": "playwright test playwright-tests/paper-management.spec.ts --reporter=list",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:agents": "tsx master-test-coordinator.ts",
+    "test:agent:account": "playwright test agents/account-activation-agent.ts --workers=1",
+    "test:agent:exam": "playwright test agents/exam-flow-agent.ts --workers=1",
+    "test:agent:scoring": "playwright test agents/scoring-agent.ts --workers=1",
+    "test:agent:score": "playwright test agents/score-management-agent.ts --workers=1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0"
+  }
+}
