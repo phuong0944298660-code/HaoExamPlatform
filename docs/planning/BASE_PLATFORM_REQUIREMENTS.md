@@ -25,9 +25,19 @@
 | 系统管理 | 字典管理、参数管理 | 🟡 重要 |
 | 系统管理 | 操作日志、登录日志 | 🔴 核心 |
 | 系统管理 | 通知公告 | 🟡 重要 |
+| 前端架构 | 动态路由系统 | 🔴 核心 |
 | 消息中心 | 站内消息、消息模板 | 🟡 重要 |
 | 个人中心 | 个人信息、修改密码 | 🔴 核心 |
 | 个人中心 | 头像修改、我的消息 | 🟡 重要 |
+
+### 1.3 文档目录
+
+- [一、现状分析](#一现状分析)
+- [二、系统管理模块](#二系统管理模块)
+- [三、前端动态路由系统](#三前端动态路由系统) ⭐ 新增
+- [四、消息中心模块](#四消息中心模块)
+- [五、个人中心模块](#五个人中心模块)
+- [六、权限控制实现](#六权限控制实现)
 
 ---
 
@@ -148,38 +158,41 @@ class SysRole(Base):
 class SysMenu(Base):
     """系统菜单表"""
     __tablename__ = "sys_menus"
-    
+
     id = Column(Integer, primary_key=True)
     menu_name = Column(String(50), nullable=False, comment="菜单名称")
-    
+
     # 父级菜单
     parent_id = Column(Integer, default=0, comment="父菜单ID")
-    
+
     # 排序
     order_num = Column(Integer, default=0, comment="显示顺序")
-    
+
     # 路由信息
     path = Column(String(200), nullable=True, comment="路由地址")
-    component = Column(String(255), nullable=True, comment="组件路径")
-    
+    component = Column(String(255), nullable=True, comment="组件名称，用于前端动态路由")
+
     # 菜单类型
     menu_type = Column(String(20), default="M", comment="菜单类型 M-目录 C-菜单 F-按钮")
-    
+
     # 权限标识
     perms = Column(String(100), nullable=True, comment="权限标识 如: system:user:list")
-    
+
     # 图标
     icon = Column(String(100), default="#", comment="菜单图标")
-    
+
     # 状态
     status = Column(Integer, default=1, comment="状态 0-禁用 1-启用")
     visible = Column(Integer, default=1, comment="显示状态 0-隐藏 1-显示")
     is_cache = Column(Integer, default=1, comment="是否缓存 0-不缓存 1-缓存")
     is_frame = Column(Integer, default=0, comment="是否外链 0-否 1-是")
-    
+
+    # 查询参数或iframe URL
+    query = Column(String(500), nullable=True, comment="路由参数或iframe链接地址")
+
     # 关联
     roles = relationship("SysRole", secondary="sys_role_menus", back_populates="menus")
-    
+
     # 审计字段
     create_by = Column(String(50), nullable=True)
     create_time = Column(DateTime, default=datetime.utcnow)
@@ -685,7 +698,140 @@ async def clean_login_logs(current_user: SysUser = Depends(get_current_admin)):
 
 ---
 
-## 三、消息中心模块
+## 三、前端动态路由系统
+
+### 3.1 需求背景
+
+为满足后台管理系统的灵活性和可扩展性，前端需要实现**动态路由系统**，支持管理员在后台【菜单管理】中配置菜单后，无需修改前端代码即可自动加载对应页面。
+
+### 3.2 核心功能需求
+
+#### 3.2.1 自动组件扫描
+
+- **需求描述**：前端构建时自动扫描 `views/` 目录下的所有 `.vue` 文件
+- **命名规范**：组件名 = 目录前缀 + PascalCase文件名
+  - 例：`@/views/admin/AccountManager.vue` → `AdminAccountManager`
+  - 例：`@/views/system/users/index.vue` → `SystemUsers`
+- **冲突处理**：不同目录下同名文件通过目录前缀区分
+
+#### 3.2.2 组件别名映射
+
+- **需求描述**：支持后端配置的组件名与前端实际组件名的映射转换
+- **映射规则**：在 `componentScanner.ts` 中维护别名映射表
+- **常见别名**：
+
+| 后端配置名 | 前端实际组件名 |
+|-----------|--------------|
+| `AdminAccounts` | `AdminAccountManager` |
+| `AdminAccount` | `AdminAccountManager` |
+| `AdminQuestions` | `AdminQuestionBankList` |
+| `AdminPapers` | `AdminPaperManager` |
+| `AdminExams` | `AdminExamManager` |
+| `AdminScores` | `AdminScoreManager` |
+
+#### 3.2.3 菜单配置字段
+
+| 字段 | 必填 | 说明 | 示例 |
+|------|------|------|------|
+| `menu_name` | 是 | 菜单显示名称 | 账号管理 |
+| `path` | 是 | 路由路径 | /accounts/list |
+| `component` | 否 | 组件名 | AdminAccountManager |
+| `menu_type` | 是 | M=目录, C=菜单, F=按钮 | C |
+| `parent_id` | 否 | 父菜单ID | 0 |
+| `icon` | 否 | Ant Design 图标名 | team |
+| `perms` | 否 | 权限标识 | system:account:list |
+| `is_cache` | 否 | 是否缓存 | 1 |
+| `is_frame` | 否 | 是否外链 | 0 |
+| `query` | 否 | 参数/iframe URL | https://example.com |
+
+#### 3.2.4 特殊页面类型
+
+1. **外链页面** (`is_frame = 1`)
+   - 在新标签页打开外部链接
+   - `query` 字段填写外部 URL
+
+2. **Iframe 内嵌** (`component = 'Iframe'`)
+   - 在系统内嵌第三方页面
+   - `query` 字段填写 iframe URL
+
+3. **普通页面** (`menu_type = 'C'`)
+   - 需要配置 `component` 字段
+   - 组件名必须与前端扫描结果匹配
+
+### 3.3 路由加载流程
+
+```
+用户登录成功
+    ↓
+获取用户角色
+    ↓
+角色为 admin？
+    ↓ 是
+调用 /api/v1/system/menus/nav 获取菜单列表
+    ↓
+前端扫描可用组件
+    ↓
+根据菜单生成路由配置
+    ↓
+使用 router.addRoute() 动态添加路由
+    ↓
+重新导航到目标页面
+```
+
+### 3.4 错误处理机制
+
+#### 3.4.1 组件未找到
+
+- **场景**：后端配置的组件名在前端不存在
+- **处理**：控制台输出警告日志，显示可用的相似组件名列表
+- **提示**：页面显示 "组件未找到，请检查菜单配置"
+
+#### 3.4.2 路由未找到
+
+- **场景**：用户访问的路径没有对应的路由
+- **处理**：跳转到 404 页面，显示诊断信息
+- **提示**：显示可能原因（Token过期、动态路由未加载、组件不存在等）
+
+#### 3.4.3 Token 过期
+
+- **场景**：动态路由加载时 Token 已过期
+- **处理**：API 返回 403，跳转登录页
+- **提示**："登录已过期，请重新登录"
+
+### 3.5 页面配置示例
+
+#### 场景1：新增账号管理页面
+
+**步骤1**：前端开发页面
+```
+文件路径：frontend/src/views/admin/AccountManager.vue
+组件名称：AdminAccountManager（自动扫描生成）
+```
+
+**步骤2**：后台菜单配置
+```sql
+INSERT INTO sys_menu (
+  menu_name, path, component, menu_type, 
+  parent_id, icon, perms, is_cache
+) VALUES (
+  '账号管理', '/accounts/list', 'AdminAccountManager', 'C',
+  0, 'team', 'system:account:list', 1
+);
+```
+
+**步骤3**：访问页面
+- 管理员登录后，侧边栏自动显示"账号管理"菜单
+- 点击菜单即可访问页面，无需重启前端服务
+
+### 3.6 性能要求
+
+1. **组件扫描**：构建时完成，不影响运行时性能
+2. **路由加载**：登录时一次性加载，后续页面切换无需重新加载
+3. **缓存策略**：支持 keep-alive 缓存，通过 `is_cache` 字段控制
+
+---
+
+## 四、消息中心模块
 
 ### 3.1 数据模型设计
 
@@ -865,82 +1011,63 @@ async def get_my_oper_logs(
 
 ## 五、前端设计
 
-### 5.1 系统管理菜单结构
+### 6.1 系统管理菜单结构（动态路由版）
 
 ```typescript
-// 系统管理菜单配置
-const systemMenus = [
-  {
-    path: '/system',
-    name: 'System',
-    component: 'Layout',
-    meta: { title: '系统管理', icon: 'SettingOutlined' },
-    children: [
-      {
-        path: 'users',
-        name: 'UserManagement',
-        component: 'system/users/index',
-        meta: { title: '用户管理', perms: ['system:user:list'] }
-      },
-      {
-        path: 'roles',
-        name: 'RoleManagement',
-        component: 'system/roles/index',
-        meta: { title: '角色管理', perms: ['system:role:list'] }
-      },
-      {
-        path: 'menus',
-        name: 'MenuManagement',
-        component: 'system/menus/index',
-        meta: { title: '菜单管理', perms: ['system:menu:list'] }
-      },
-      {
-        path: 'depts',
-        name: 'DeptManagement',
-        component: 'system/depts/index',
-        meta: { title: '部门管理', perms: ['system:dept:list'] }
-      },
-      {
-        path: 'dicts',
-        name: 'DictManagement',
-        component: 'system/dicts/index',
-        meta: { title: '字典管理', perms: ['system:dict:list'] }
-      },
-      {
-        path: 'configs',
-        name: 'ConfigManagement',
-        component: 'system/configs/index',
-        meta: { title: '参数管理', perms: ['system:config:list'] }
-      },
-      {
-        path: 'notices',
-        name: 'NoticeManagement',
-        component: 'system/notices/index',
-        meta: { title: '通知公告', perms: ['system:notice:list'] }
-      },
-      {
-        path: 'logs',
-        name: 'LogManagement',
-        component: 'system/logs/index',
-        meta: { title: '日志管理', perms: ['system:log:list'] },
-        children: [
-          {
-            path: 'operlog',
-            name: 'OperLog',
-            component: 'system/logs/operlog',
-            meta: { title: '操作日志', perms: ['system:log:operlog'] }
-          },
-          {
-            path: 'loginlog',
-            name: 'LoginLog',
-            component: 'system/logs/loginlog',
-            meta: { title: '登录日志', perms: ['system:log:loginlog'] }
-          }
-        ]
-      }
-    ]
-  }
-];
+// 前端动态路由系统配置
+// 菜单数据从后端 /api/v1/system/menus/nav 接口获取
+
+/**
+ * 后端菜单数据结构
+ */
+interface MenuItem {
+  id: number;                    // 菜单ID
+  menu_name: string;             // 菜单名称
+  path: string;                  // 路由路径
+  component?: string;            // 组件名（如：AdminAccountManager）
+  menu_type: 'M' | 'C' | 'F';    // M=目录, C=菜单, F=按钮
+  parent_id: number;             // 父菜单ID
+  icon?: string;                 // Ant Design 图标名
+  perms?: string;                // 权限标识
+  is_cache?: boolean;            // 是否缓存
+  is_frame?: boolean;            // 是否外链
+  query?: string;                // 查询参数/iframe URL
+  children?: MenuItem[];         // 子菜单
+}
+
+/**
+ * 前端组件命名规范
+ * 目录前缀 + PascalCase文件名
+ * 
+ * 示例：
+ * - @/views/admin/AccountManager.vue     → AdminAccountManager
+ * - @/views/system/users/index.vue       → SystemUsers
+ * - @/views/teacher/QuestionBanks.vue    → TeacherQuestionBanks
+ * - @/views/common/Iframe.vue            → Iframe
+ */
+
+/**
+ * 组件别名映射（处理命名不一致）
+ */
+const componentAliasMap: Record<string, string> = {
+  'AdminAccounts': 'AdminAccountManager',
+  'AdminAccount': 'AdminAccountManager',
+  'AdminQuestions': 'AdminQuestionBankList',
+  'AdminPapers': 'AdminPaperManager',
+  'AdminExams': 'AdminExamManager',
+  'AdminScores': 'AdminScoreManager',
+};
+
+/**
+ * 系统管理菜单配置示例（后台配置）
+ * 
+ * SQL 插入示例：
+ * INSERT INTO sys_menu (menu_name, path, component, menu_type, parent_id, icon, perms) VALUES
+ * ('系统管理', '/system', NULL, 'M', 0, 'setting', NULL),
+ * ('用户管理', '/system/users', 'SystemUsers', 'C', @parent_id, 'user', 'system:user:list'),
+ * ('角色管理', '/system/roles', 'SystemRoles', 'C', @parent_id, 'team', 'system:role:list'),
+ * ('菜单管理', '/system/menus', 'SystemMenus', 'C', @parent_id, 'menu', 'system:menu:list');
+ */
 ```
 
 ### 5.2 个人中心路由
@@ -1050,8 +1177,9 @@ async def apply_data_scope(query, user_id: int):
 
 ---
 
-*文档版本: v1.0*  
-*更新日期: 2026-03-24*
+*文档版本: v1.2*  
+*更新日期: 2026-04-08*  
+*更新内容: 新增前端动态路由系统需求章节*
 
 ---
 

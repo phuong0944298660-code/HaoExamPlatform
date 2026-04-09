@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { generateRoutesFromMenus, type MenuItem } from './dynamicRoutes'
+import { message } from 'ant-design-vue'
 
 NProgress.configure({ showSpinner: false })
 
-const routes: RouteRecordRaw[] = [
+// ==================== 静态路由（不需要权限控制的路由）====================
+const staticRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
@@ -17,7 +20,21 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Activate.vue'),
     meta: { title: '激活账号', public: true },
   },
-  // ── 学生端 ──
+  // 管理端默认根路由（动态路由加载前使用）
+  {
+    path: '/',
+    component: () => import('@/layouts/AdminLayout.vue'),
+    meta: { title: '管理控制台', role: 'admin' },
+    children: [
+      {
+        path: '',
+        name: 'AdminDashboard',
+        component: () => import('@/views/admin/Dashboard.vue'),
+        meta: { title: '管理控制台' },
+      },
+    ],
+  },
+  // 学生端路由（结构稳定，保持静态）
   {
     path: '/student',
     component: () => import('@/layouts/StudentLayout.vue'),
@@ -31,7 +48,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'practice/wrong-answers', name: 'WrongAnswerBook', component: () => import('@/views/student/WrongAnswerBook.vue'), meta: { title: '错题本', accountType: 'PRACTICE' } },
     ],
   },
-  // ── 教师端 ──
+  // 教师端路由（结构稳定，保持静态）
   {
     path: '/teacher',
     component: () => import('@/layouts/TeacherLayout.vue'),
@@ -55,69 +72,115 @@ const routes: RouteRecordRaw[] = [
       { path: 'grading', name: 'Grading', component: () => import('@/views/teacher/GradingPage.vue'), meta: { title: '主观题批阅' } },
     ],
   },
-  // ── 管理端 ──
+  // 403 无权限页面
   {
-    path: '/',
-    component: () => import('@/layouts/AdminLayout.vue'),
-    meta: { role: 'admin' },
-    children: [
-      { path: '', name: 'AdminDashboard', component: () => import('@/views/admin/Dashboard.vue'), meta: { title: '管理控制台' } },
-      // 账号管理
-      {
-        path: 'accounts',
-        meta: { title: '账号管理' },
-        children: [
-          { path: 'list', name: 'Accounts', component: () => import('@/views/admin/AccountManager.vue'), meta: { title: '账号列表' } },
-          { path: 'practice', name: 'PracticeAccounts', component: () => import('@/views/admin/AccountManager.vue'), meta: { title: '生成练习账号', activeMenu: '/accounts/list' } },
-          { path: 'exam', name: 'ExamAccounts', component: () => import('@/views/admin/AccountManager.vue'), meta: { title: '生成考试账号', activeMenu: '/accounts/list' } },
-          { path: 'activation', name: 'ActivationCodes', component: () => import('@/views/admin/ActivationCodes.vue'), meta: { title: '激活码管理' } },
-          { path: 'activation-codes/generate', name: 'ActivationCodesGenerate', component: () => import('@/views/admin/ActivationCodes.vue'), meta: { title: '生成激活码', activeMenu: '/accounts/activation' } },
-          { path: 'plans', name: 'ActivationPlans', component: () => import('@/views/admin/ActivationPlans.vue'), meta: { title: '激活计划管理' }, alias: ['activation-plans'] },
-        ]
-      },
-      // 业务管理
-      { path: 'questions/banks', name: 'AdminQuestionBanks', component: () => import('@/views/admin/QuestionBankList.vue'), meta: { title: '题库管理' }, alias: ['/questions/question-banks', '/questions/list', '/admin/question-banks'] },
-      { path: 'questions/banks/:bankId', name: 'AdminQuestionBankDetail', component: () => import('@/views/admin/QuestionBankDetail.vue'), meta: { title: '题库详情' } },
-      { path: 'questions/import', name: 'AdminQuestionsImport', component: () => import('@/views/admin/QuestionBankList.vue'), meta: { title: '批量导入题目', activeMenu: '/questions/banks' } },
-      { path: 'papers/list', name: 'AdminPapers', component: () => import('@/views/admin/PaperManager.vue'), meta: { title: '试卷列表' }, alias: ['/papers/all', '/admin/papers'] },
-      { path: 'papers/:paperId', name: 'AdminPaperDetail', component: () => import('@/views/teacher/PaperDetail.vue'), meta: { title: '试卷编辑' } },
-      { path: 'exams/list', name: 'AdminExams', component: () => import('@/views/admin/ExamManager.vue'), meta: { title: '考试管理' }, alias: ['/exams/all', '/admin/exams'] },
-      { path: 'exams/create', name: 'AdminExamCreate', component: () => import('@/views/admin/ExamManager.vue'), meta: { title: '创建考试', activeMenu: '/exams/list' } },
-      { path: 'exams/monitoring', name: 'AdminExamMonitoring', component: () => import('@/views/teacher/ExamDashboard.vue'), meta: { title: '实时监控' } },
-      { path: 'scores/list', name: 'AdminScores', component: () => import('@/views/admin/ScoreManager.vue'), meta: { title: '成绩管理' }, alias: ['/scores/stats', '/scores/scores', '/admin/results'] },
-      { path: 'resources/list', name: 'AdminResources', component: () => import('@/views/admin/ResourceManager.vue'), meta: { title: '资源管理' }, alias: ['/resources/library', '/resources/resources'] },
-      { path: 'feedbacks/list', name: 'AdminFeedbacks', component: () => import('@/views/admin/FeedbackManager.vue'), meta: { title: '赛事反馈' }, alias: ['/feedback/process'] },
-      // 系统管理
-      { path: 'system/users', name: 'SystemUsers', component: () => import('@/views/system/users/index.vue'), meta: { title: '用户管理' } },
-      { path: 'system/roles', name: 'SystemRoles', component: () => import('@/views/system/roles/index.vue'), meta: { title: '角色管理' } },
-      { path: 'system/menus', name: 'SystemMenus', component: () => import('@/views/system/menus/index.vue'), meta: { title: '菜单管理' } },
-      // 部门管理 (暂无后端支持，设为二级路由或暂缓)
-      { path: 'system/depts', name: 'SystemDepts', component: () => import('@/views/system/users/index.vue'), meta: { title: '部门管理' } },
-      { path: 'system/dict', name: 'SystemDict', component: () => import('@/views/system/dict/index.vue'), meta: { title: '字典管理' } },
-      { path: 'system/config', name: 'SystemConfig', component: () => import('@/views/system/config/index.vue'), meta: { title: '参数管理' } },
-      { path: 'system/notice', name: 'SystemNotice', component: () => import('@/views/system/notice/index.vue'), meta: { title: '通知公告' } },
-      { path: 'system/operation-logs', name: 'SystemOperationLogs', component: () => import('@/views/system/logs/operation.vue'), meta: { title: '操作日志' } },
-      { path: 'system/login-logs', name: 'SystemLoginLogs', component: () => import('@/views/system/logs/login.vue'), meta: { title: '登录日志' } },
-    ],
+    path: '/403',
+    name: 'Forbidden',
+    component: () => import('@/views/error/403.vue'),
+    meta: { title: '无权限访问', public: true },
   },
-  // 默认重定向或 404
-  { path: '/:pathMatch(.*)*', redirect: '/' },
+  // 404 页面 - 不设置为 public，以便触发动态路由加载
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/error/LoadError.vue'),
+    meta: { title: '页面不存在' },
+  },
 ]
 
+// ==================== 创建 Router 实例 ====================
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: staticRoutes,
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
-// 路由守卫
-router.beforeEach((to, from, next) => {
+// ==================== 动态路由管理 ====================
+
+// 标记是否已经加载动态路由
+let hasLoadedDynamicRoutes = false
+
+/**
+ * 加载动态路由
+ * 从后端获取菜单配置并生成路由
+ */
+export async function loadDynamicRoutes(): Promise<boolean> {
+  if (hasLoadedDynamicRoutes) return true
+
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) return false
+
+    // 从后端获取菜单
+    const res = await fetch('/api/v1/system/menus/nav', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    const data = await res.json()
+
+    if (data.code === 200 && data.data) {
+      // 生成动态路由
+      const dynamicRoutes = generateRoutesFromMenus(data.data)
+
+      // 添加路由
+      let addedCount = 0
+      for (const route of dynamicRoutes) {
+        // 检查路由是否已存在
+        try {
+          const existingRoute = router.resolve(route.path)
+          if (existingRoute.name === undefined || existingRoute.name === 'NotFound') {
+            router.addRoute(route)
+            addedCount++
+          }
+        } catch {
+          // 路由不存在，添加
+          router.addRoute(route)
+          addedCount++
+        }
+      }
+
+      hasLoadedDynamicRoutes = true
+      console.log(`[Router] 动态路由加载完成，新增 ${addedCount} 条路由`)
+      return true
+    }
+  } catch (err) {
+    console.error('[Router] 加载动态路由失败:', err)
+  }
+  return false
+}
+
+/**
+ * 重置动态路由
+ * 用于退出登录后清除动态路由
+ */
+export function resetDynamicRoutes(): void {
+  if (!hasLoadedDynamicRoutes) return
+
+  // 获取所有路由
+  const routes = router.getRoutes()
+
+  // 移除所有动态添加的路由
+  for (const route of routes) {
+    if (route.name && !['Login', 'Activate', 'StudentHome', 'TeacherDashboard', 'Forbidden', 'NotFound'].includes(route.name as string)) {
+      router.removeRoute(route.name)
+    }
+  }
+
+  hasLoadedDynamicRoutes = false
+  console.log('[Router] 动态路由已重置')
+}
+
+// ==================== 路由守卫 ====================
+
+router.beforeEach(async (to, from, next) => {
   NProgress.start()
   document.title = `${to.meta.title || '接力教育'} - 智慧云平台`
 
   // 安全获取 localStorage 数据
   let token: string | null = null
   let user: any = null
-  
+
   try {
     token = localStorage.getItem('token')
     const userStr = localStorage.getItem('user')
@@ -132,12 +195,10 @@ router.beforeEach((to, from, next) => {
 
   // 公开页面直接放行
   if (to.meta.public) {
-    // 已登录用户访问登录页，跳转到对应首页
     if (token && user?.role && to.path === '/login') {
       const roleLower = user.role?.toLowerCase()
       const redirectPath = roleLower === 'admin' ? '/' :
                           roleLower === 'teacher' ? '/teacher' : '/student'
-      console.log('[Router] 已登录用户访问登录页，重定向到:', redirectPath)
       next(redirectPath)
       return
     }
@@ -147,27 +208,36 @@ router.beforeEach((to, from, next) => {
 
   // 未登录跳转登录页
   if (!token) {
-    console.log('[Router] 未登录，跳转登录页')
     next('/login')
     return
+  }
+
+  // 加载动态路由（仅管理员需要）
+  const userRoleLower = user?.role?.toLowerCase()
+  if (userRoleLower === 'admin' && !hasLoadedDynamicRoutes) {
+    const success = await loadDynamicRoutes()
+
+    if (success) {
+      // 重新导航到目标路由（确保新添加的路由生效）
+      next({ path: to.path, query: to.query, replace: true })
+      return
+    }
   }
 
   // 角色权限检查
   if (to.meta.role && user) {
     // admin 可以访问所有页面
-    const userRoleLower = user.role?.toLowerCase()
     if (userRoleLower === 'admin') {
       next()
       return
     }
     // 角色不匹配，跳转到对应首页
     if (userRoleLower !== to.meta.role) {
-      const redirectPath = userRoleLower === 'admin' ? '/' : 
+      const redirectPath = userRoleLower === 'admin' ? '/' :
                           userRoleLower === 'teacher' ? '/teacher' : '/student'
-      
+
       console.log('[Router] 角色不匹配，当前角色:', userRoleLower, '，页面需要:', to.meta.role, '，重定向到:', redirectPath)
-      
-      // 防止无限重定向
+
       if (to.path === redirectPath) {
         next()
       } else {
@@ -177,13 +247,25 @@ router.beforeEach((to, from, next) => {
     }
   }
 
+  // 检查页面权限
+  if (to.meta.perms && user) {
+    const userPerms = user.permissions || []
+    const hasPerm = userPerms.includes(to.meta.perms as string)
+
+    if (!hasPerm) {
+      console.log('[Router] 无权限访问:', to.meta.perms)
+      message.error('无权限访问该页面')
+      next('/403')
+      return
+    }
+  }
+
   // 账号类型检查（PRACTICE / EXAM 账号隔离）
   if (to.meta.accountType && user) {
     const userAccountType = (user.accountType || user.account_type || '').toUpperCase()
     const requiredType = (to.meta.accountType as string).toUpperCase()
     if (userAccountType && userAccountType !== requiredType) {
-      // 重定向到对应的首页
-      const redirectPath = user.role?.toLowerCase() === 'student' ? '/student' : `/${user.role?.toLowerCase()}`
+      const redirectPath = userRoleLower === 'student' ? '/student' : `/${userRoleLower}`
       console.log(`[Router] 账号类型不匹配 (需要 ${requiredType}，实际 ${userAccountType})，重定向到: ${redirectPath}`)
       next(redirectPath)
       return

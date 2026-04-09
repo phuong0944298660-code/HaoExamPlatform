@@ -1,5 +1,5 @@
 # =============================================================
-# 接力教育智慧云平台 - 本地快速启动配置 (H2内存数据库 + 嵌入式Redis)
+# 接力教育智慧云平台 - 本地开发配置 (MySQL)
 # =============================================================
 
 server:
@@ -14,12 +14,12 @@ spring:
     allow-bean-definition-overriding: true
     web-application-type: servlet
 
-  # 数据源配置 - H2内存数据库
+  # 数据源配置 - MySQL
   datasource:
-    url: jdbc:h2:mem:jieli_edu;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;NON_KEYWORDS=USER
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/jieli_edu?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: JieliLocalPool
@@ -32,22 +32,14 @@ spring:
   # JPA/Hibernate配置
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-
-  # H2控制台（开发和调试）
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
 
   # Redis配置
   redis:

@@ -69,14 +69,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- H2 Database (本地开发使用) -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

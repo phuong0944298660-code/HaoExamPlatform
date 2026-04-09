@@ -30,6 +30,11 @@ public class SysMenuController {
      */
     @GetMapping("/nav")
     public Result<?> getNavMenus(@CurrentUser UserPrincipal user) {
+        // 未登录用户默认返回空列表
+        if (user == null) {
+            return Result.success(new ArrayList<>());
+        }
+
         String roleKey = user.getRole();
         if (roleKey == null) {
             return Result.success(new ArrayList<>());

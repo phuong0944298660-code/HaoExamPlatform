@@ -307,7 +307,200 @@ public class AsyncTaskService {
 - **学校隔离**: 账号属性包含 `school`，教师仅能管理本校学生和班级。教师可以通过“班级管理”入口，为属于同一学校的学生分配班级。
 - **搜索化关联**: 账号管理的“所属学校”采用搜索选择+动态新增模式，确保数据一致性。
 
-### 8. UI/UX 规范
+### 8. 动态路由系统 (Dynamic Routing)
+
+前端采用企业级动态路由架构，支持管理员在后台菜单管理图形化配置后，无需修改前端代码即可上线新页面。
+
+#### 8.1 架构概览
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        前端工程                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │ views/       │  │ router/      │  │ layouts/             │  │
+│  │ - admin/     │  │ - index.ts   │  │ - AdminLayout.vue    │  │
+│  │ - teacher/   │  │ - dynamic.ts │  │ - TeacherLayout.vue  │  │
+│  │ - student/   │  │ - scanner.ts │  │ - StudentLayout.vue  │  │
+│  │ - system/    │  │              │  │ - BlankLayout.vue    │  │
+│  └──────┬───────┘  └──────────────┘  └──────────────────────┘  │
+│         │                                                       │
+│         │ 构建时自动扫描                                         │
+│         ▼                                                       │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │                   组件注册中心 (componentScanner.ts)      │  │
+│  │  扫描规则：                                                │  │
+│  │  - @/views/admin/*.vue    →  Admin{文件名}                │  │
+│  │  - @/views/teacher/*.vue  →  Teacher{文件名}              │  │
+│  │  - @/views/student/*.vue  →  Student{文件名}              │  │
+│  │  - @/views/system/*.vue   →  System{文件名}               │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 运行时动态加载
+                                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        后端服务                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  sys_menu 表（已有）                                      │  │
+│  │  - menu_name: 菜单名称                                    │  │
+│  │  - path: 路由路径                                         │  │
+│  │  - component: 组件名（如：AdminDataScreen）               │  │
+│  │  - menu_type: M(目录)/C(菜单)/F(按钮)                     │  │
+│  │  - perms: 权限标识                                        │  │
+│  │  - is_cache: 是否缓存                                     │  │
+│  │  - is_frame: 是否外链                                     │  │
+│  │  - query: 路由参数/iframe URL                             │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                              │                                  │
+│                              │ GET /api/v1/system/menus/nav     │
+│                              ▼                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  菜单管理后台（图形化配置）                                │  │
+│  │  - 新增菜单时，输入组件名称                                │  │
+│  │  - 自动校验路径格式                                        │  │
+│  │  - 实时预览路由效果                                        │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 8.2 组件命名规范（重要）
+
+为避免不同目录下同名文件冲突，采用**目录前缀 + PascalCase文件名**的命名规则：
+
+| 文件路径 | 注册名称 | 说明 |
+|---------|---------|------|
+| `@/views/admin/DataScreen.vue` | `AdminDataScreen` | 管理员数据大屏 |
+| `@/views/teacher/DataScreen.vue` | `TeacherDataScreen` | 教师数据大屏 |
+| `@/views/student/ExamPage.vue` | `StudentExamPage` | 学生考试页面 |
+| `@/views/system/users/index.vue` | `SystemUsers` | 系统用户管理 |
+| `@/views/common/Iframe.vue` | `Iframe` | 内嵌页面通用组件 |
+| `@/views/common/ExternalLink.vue` | `ExternalLink` | 外链跳转组件 |
+
+**命名规则**：
+1. 提取目录名首字母大写作为前缀
+2. 文件名转为 PascalCase（`data-screen.vue` → `DataScreen`）
+3. 子目录文件使用下划线连接（`system/users/roles.vue` → `SystemUsers_Roles`）
+
+#### 8.3 路由配置字段
+
+后端 `sys_menu` 表字段与前端路由的映射：
+
+| 字段 | 类型 | 说明 | 路由映射 |
+|------|------|------|---------|
+| `menu_name` | string | 菜单显示名称 | `meta.title` |
+| `path` | string | 路由路径，如 `/dashboard/data-screen` | `path` |
+| `component` | string | 组件名，如 `AdminDataScreen` | 动态加载组件 |
+| `menu_type` | enum | M=目录, C=菜单, F=按钮 | 类型判断 |
+| `parent_id` | number | 父菜单ID | 层级结构 |
+| `icon` | string | Ant Design 图标名 | `meta.icon` |
+| `perms` | string | 权限标识，如 `system:dashboard:view` | `meta.perms` |
+| `is_cache` | boolean | 是否缓存 | `meta.keepAlive` |
+| `is_frame` | boolean | 是否外链 | 外链处理 |
+| `query` | string | 查询参数或 iframe URL | `meta.iframeUrl` |
+
+#### 8.4 特殊页面类型
+
+**1. 外链页面 (is_frame = true)**
+- 在新标签页打开外部链接
+- 使用 `ExternalLink` 组件处理
+
+**2. Iframe 内嵌页面 (component = 'Iframe')**
+- 在系统内嵌第三方页面
+- 使用 `Iframe` 组件，URL 配置在 `query` 字段
+
+**3. 权限控制页面 (perms)**
+- 路由守卫检查用户权限
+- 无权限时跳转 `/403` 页面
+
+#### 8.5 动态路由加载流程
+
+```typescript
+// 1. 登录成功后触发
+router.beforeEach(async (to, from, next) => {
+  // 2. 管理员角色加载动态路由
+  if (userRole === 'admin' && !hasLoadedDynamicRoutes) {
+    const success = await loadDynamicRoutes()
+    // 3. 重新导航确保新路由生效
+    if (success) next({ ...to, replace: true })
+  }
+})
+
+// loadDynamicRoutes 内部流程：
+async function loadDynamicRoutes() {
+  // 1. 获取后端菜单
+  const menus = await fetch('/api/v1/system/menus/nav')
+  // 2. 扫描可用组件
+  const componentMap = generateComponentMap()
+  // 3. 生成路由配置
+  const routes = generateRoutesFromMenus(menus, componentMap)
+  // 4. 动态添加路由
+  routes.forEach(route => router.addRoute(route))
+}
+```
+
+#### 8.6 开发新页面流程
+
+**步骤1：开发页面组件**
+```bash
+# 在对应目录创建 Vue 文件
+frontend/src/views/admin/NewFeature.vue
+```
+
+**步骤2：遵循命名规范**
+- 组件文件名使用 PascalCase
+- 多单词使用驼峰（`DataScreen.vue`）
+
+**步骤3：管理员配置菜单**
+1. 进入后台【系统管理】→【菜单管理】
+2. 点击【新增】按钮
+3. 填写配置：
+   - 菜单名称：新功能
+   - 路由路径：`/admin/new-feature`
+   - 组件名称：`AdminNewFeature`（必须匹配扫描规则）
+   - 菜单类型：C（菜单）
+   - 权限标识：`admin:newfeature:view`（可选）
+   - 是否缓存：是/否
+4. 保存并刷新页面
+
+**无需修改前端路由配置！**
+
+#### 8.7 静态路由保留
+
+以下路由保持静态配置，不参与动态加载：
+
+| 路由 | 用途 | 说明 |
+|------|------|------|
+| `/login` | 登录页 | 公开访问 |
+| `/activate` | 激活账号 | 公开访问 |
+| `/student/*` | 学生端 | 结构稳定 |
+| `/teacher/*` | 教师端 | 结构稳定 |
+| `/403` | 无权限页 | 错误页面 |
+| `/*` | 404 页面 | 通配符路由 |
+
+#### 8.8 权限与角色检查
+
+```typescript
+// 路由守卫中的权限检查
+if (to.meta.perms) {
+  const userPerms = userStore.permissions || []
+  const hasPerm = userPerms.includes(to.meta.perms as string)
+  
+  if (!hasPerm) {
+    message.error('无权限访问该页面')
+    next('/403')
+    return
+  }
+}
+
+// 角色检查
+if (to.meta.role && userRole !== to.meta.role) {
+  // 角色不匹配，重定向到对应首页
+  next(redirectPath)
+  return
+}
+```
+
+### 9. UI/UX 规范
 
 #### 侧边栏菜单图标规范
 

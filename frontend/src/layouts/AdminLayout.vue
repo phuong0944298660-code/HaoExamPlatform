@@ -429,17 +429,27 @@ function closeTab(path: string) {
 function onMenuClick({ key }: { key: string }) {
   console.log('[AdminLayout] Menu clicked:', key, 'Current route:', route.path)
 
-  // 检查是否是有效路由
-  const routeMatch = router.resolve(key)
-  console.log(routeMatch)
-  if (!routeMatch || routeMatch.name === undefined) {
-    console.error('[AdminLayout] 无效的路由:', key)
-    message.error('该功能暂未配置，请联系管理员')
+  if (key === route.path) {
+    console.log('[AdminLayout] Already on this page, skipping push')
     return
   }
 
-  if (key === route.path) {
-    console.log('[AdminLayout] Already on this page, skipping push')
+  // 检查是否是有效路由
+  let routeMatch
+  try {
+    routeMatch = router.resolve(key)
+    console.log('[AdminLayout] Route resolved:', routeMatch)
+  } catch (err) {
+    console.error('[AdminLayout] 路由解析失败:', key, err)
+    message.error('页面路由配置错误，请联系管理员')
+    return
+  }
+
+  // 检查路由是否存在（name 为 undefined 或 'NotFound' 表示路由不存在）
+  if (!routeMatch || routeMatch.name === undefined || routeMatch.name === 'NotFound') {
+    console.error('[AdminLayout] 路由不存在:', key)
+    console.error('[AdminLayout] 当前路由列表:', router.getRoutes().map(r => ({ path: r.path, name: r.name })))
+    message.error('该页面暂未配置或组件不存在，请检查菜单配置')
     return
   }
 

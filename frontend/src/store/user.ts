@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { UserInfo } from '@/types/api'
 import { login as loginApi, logout as logoutApi, getCurrentUser } from '@/api/auth'
-import router from '@/router'
+import router, { resetDynamicRoutes } from '@/router'
 import { heartbeatService } from '@/utils/request'
 
 export const useUserStore = defineStore('user', () => {
@@ -56,7 +56,10 @@ export const useUserStore = defineStore('user', () => {
     }
     // 停止心跳检测
     heartbeatService.stop()
-    
+
+    // 重置动态路由
+    resetDynamicRoutes()
+
     token.value = ''
     user.value = null
     localStorage.removeItem('token')

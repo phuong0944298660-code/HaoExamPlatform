@@ -1,29 +1,22 @@
-# 测试环境配置
+# 测试环境配置 - 使用MySQL
 spring:
   main:
     allow-bean-definition-overriding: true
-  
+
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS PUBLIC
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  
+    url: jdbc:mysql://localhost:3306/jieli_edu_test?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+
   jpa:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        # 禁用索引自动创建以避免重复索引错误
-        hbm2ddl:
-          import_files_sql_extractor: org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor
-  
-  h2:
-    console:
-      enabled: true
 
   # 禁用Redis（测试环境使用内存缓存）
   data:
