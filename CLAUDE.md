@@ -1085,6 +1085,35 @@ PATCH：向下兼容的问题修复
 
 ---
 
+## ⚠️ 开发原则与约束
+
+### 数据库使用规范（重要）
+
+**本项目强制使用 MySQL 8.0 作为唯一数据库，不允许切换到其他数据库。**
+
+#### 原则
+- **必须使用 MySQL 8.0**：生产环境、开发环境、测试环境统一使用 MySQL 8.0
+- **禁止使用 H2**：已从项目中完全移除 H2 内存数据库支持
+- **禁止临时切换**：遇到数据库连接问题时，必须解决 MySQL 连接问题，而不是切换到其他数据库
+
+#### 配置要求
+- **开发环境**：本地安装 MySQL 8.0，端口 3306
+- **连接配置**：`application-dev.yml` 已配置为 MySQL 连接
+- **初始化**：使用 `scripts/init.sql` 初始化数据库结构和基础数据
+
+#### 故障处理
+当 MySQL 连接失败时：
+1. ✅ 检查 MySQL 服务是否启动：`sc query MySQL80`
+2. ✅ 检查连接配置（用户名、密码、端口）
+3. ✅ 检查数据库 `jieli_edu` 是否存在
+4. ❌ **禁止切换到 H2 或其他内存数据库**
+5. ❌ **禁止修改 `application-dev.yml` 使用其他数据库驱动**
+
+#### 历史记录
+- 2026-04-09：已从项目中完全移除 H2 支持，删除 `data-h2.sql`，统一使用 MySQL
+
+---
+
 ## 🚀 审计任务 (Audit Task List)
 
 请严格参照 `docs/guides/DETAILED_TEST_TODO_AND_PROCEDURES.md` 执行以下 13 阶段审计：
@@ -1109,7 +1138,7 @@ PATCH：向下兼容的问题修复
 
 ---
 
-**最后更新**: 2026-04-08
+**最后更新**: 2026-04-09
 **Git 仓库**: https://github.com/phuong0944298660-code/HaoExamPlatform
 **版本**: Java/Spring Boot RBAC 2.0 优化版
 **迁移状态**: ✅ 从Python FastAPI完全迁移到Java Spring Boot
