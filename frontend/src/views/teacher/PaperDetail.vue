@@ -523,6 +523,24 @@ onMounted(() => {
   padding-bottom: 16px;
   border-bottom: 1px solid #f0f0f0;
 }
+.filter-form :deep(.ant-form-item) {
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.filter-form :deep(.ant-form-item-label) {
+  padding-right: 4px;
+}
+.info-card :deep(.ant-form-item) {
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.info-card :deep(.ant-form-item-label) {
+  padding-right: 4px;
+}
 
 .question-list {
   flex: 1;

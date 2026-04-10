@@ -324,6 +324,15 @@ onMounted(fetchNotices)
 .search-form {
   margin-bottom: 16px;
 }
+.search-form :deep(.ant-form-item) {
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.search-form :deep(.ant-form-item-label) {
+  padding-right: 4px;
+}
 .notice-view {
   padding: 16px;
 }

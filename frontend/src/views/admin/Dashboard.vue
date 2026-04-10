@@ -677,6 +677,7 @@ onUnmounted(() => {
   font-weight: 600;
   margin: 0 0 8px 0;
   color: #ffffff;
+  letter-spacing: 0.05em;
 }
 
 .welcome-subtitle {

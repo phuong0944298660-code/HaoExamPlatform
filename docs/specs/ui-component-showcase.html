@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI 组件库 - 接力教育智慧云平台</title>
+  <link rel="stylesheet" href="https://unpkg.com/ant-design-vue@4.2.6/dist/reset.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #fff;
+      color: #262626;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: #1890ff; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      border-right: 1px solid #f0f0f0;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      overflow-y: auto;
+      background: #fff;
+    }
+    .sidebar-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .sidebar-title { font-size: 18px; font-weight: 600; color: #262626; margin: 0; }
+    .sidebar-subtitle { font-size: 12px; color: #8c8c8c; margin-top: 4px; }
+    .nav-group { padding: 12px 0; }
+    .nav-group-title {
+      padding: 8px 24px;
+      font-size: 12px;
+      color: #8c8c8c;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .nav-item {
+      display: block;
+      padding: 10px 24px;
+      color: #595959;
+      font-size: 14px;
+      transition: all .2s;
+      border-right: 3px solid transparent;
+    }
+    .nav-item:hover { color: #1890ff; background: #f6fffe; }
+    .nav-item.active { color: #1890ff; background: #e6f7ff; border-right-color: #1890ff; }
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      max-width: 900px;
+      padding: 40px 48px 80px;
+    }
+    .section { margin-bottom: 56px; }
+    .section-title {
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #1f1f1f;
+    }
+    .section-desc { color: #595959; margin-bottom: 24px; }
+    .demo-card {
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .demo-block {
+      padding: 32px 24px;
+      background: #fff;
+    }
+    .demo-divider {
+      height: 1px;
+      background: #f0f0f0;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #fafafa;
+      cursor: pointer;
+      user-select: none;
+    }
+    .code-title { font-size: 13px; color: #595959; }
+    .code-toggle { font-size: 13px; color: #1890ff; }
+    .code-block {
+      background: #fafafa;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      margin: 0;
+      font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #262626;
+    }
+    .sub-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 32px 0 16px;
+      color: #262626;
+    }
+    .sub-desc { color: #595959; margin-bottom: 16px; }
+    .table-props {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .table-props th, .table-props td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .table-props th { background: #fafafa; color: #595959; font-weight: 500; }
+    .tag-prop { color: #096dd9; background: #e6f7ff; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    .tag-required { color: #cf1322; background: #fff2f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+    /* 与 layout-override.css 中保持一致的关键规则 */
+    .search-form .ant-select,
+    .search-form .ant-input,
+    .search-form .ant-picker,
+    .search-form .ant-input-number,
+    .search-form .ant-input-affix-wrapper {
+      height: 32px;
+    }
+    .search-form .ant-input-affix-wrapper .ant-input {
+      height: auto;
+    }
+    .search-form .ant-form-item-control-input {
+      min-height: auto;
+    }
+
+    /* Static demo helpers */
+    .custom-select {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 28px 0 11px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      background: #fff;
+      color: #262626;
+      font-size: 14px;
+      min-width: 120px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .custom-select:hover { border-color: #40a9ff; }
+    .custom-select.active { border-color: #1890ff; box-shadow: 0 0 0 2px rgba(24,144,255,.2); }
+    .custom-select::after {
+      content: '';
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      margin-top: -2px;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid rgba(0,0,0,.25);
+      transition: transform .2s;
+    }
+    .custom-select.active::after { transform: rotate(180deg); }
+    .custom-select-placeholder { color: #bfbfbf; }
+
+    .custom-select-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 100%;
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.08), 0 3px 6px -4px rgba(0,0,0,.12);
+      z-index: 1000;
+      padding: 4px 0;
+    }
+    .custom-select-option {
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #262626;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .custom-select-option:hover { background: #f5f5f5; }
+    .custom-select-option.selected { background: #e6f7ff; color: #1890ff; font-weight: 500; }
+
+    .demo-input {
+    .demo-input {
+      height: 32px;
+      padding: 4px 11px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #262626;
+      background: #fff;
+      min-width: 160px;
+    }
+    .demo-input::placeholder { color: #bfbfbf; }
+  </style>
+</head>
+<body>
+  <div id="app" class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Jieli UI</div>
+        <div class="sidebar-subtitle">接力教育 · 组件库文档</div>
+      </div>
+      <nav>
+        <div class="nav-group">
+          <div class="nav-group-title">组件</div>
+          <a v-for="item in navList" :key="item.id" :href="'#' + item.id"
+             :class="['nav-item', activeNav === item.id ? 'active' : '']"
+             @click.prevent="scrollTo(item.id)">
+            {{ item.name }}
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="main" role="main">
+      <!-- Button -->
+      <section id="button" class="section" ref="button">
+        <div class="section-title">Button 按钮</div>
+        <div class="section-desc">常用操作按钮，支持主操作、次操作、危险操作、表格内操作等多种场景。</div>
+        <div class="sub-title">基础用法</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-space>
+              <a-button type="primary">主操作</a-button>
+              <a-button>次要操作</a-button>
+              <a-button type="dashed">虚线按钮</a-button>
+              <a-button type="text">文字按钮</a-button>
+              <a-button type="link">链接按钮</a-button>
+            </a-space>
+          </div>
+        </div>
+      </section>
+
+      <section id="search-form" class="section" ref="searchForm">
+        <div class="section-title">Search Form 搜索表单</div>
+        <div class="section-desc">所有管理后台的搜索/筛选表单必须统一使用 <code>.search-form</code> 类。高度统一规则已全局定义，禁止在单页面重复书写 <code>height: 32px</code>。</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <div class="search-form" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span>状态</span>
+                <div class="custom-select" :class="{ active: selectOpen.s1 }" style="width:120px" @click.stop="toggleSelect('s1')">
+                  <span :class="{ 'custom-select-placeholder': !selectVals.s1 }">{{ selectVals.s1 || '全部' }}</span>
+                  <div class="custom-select-dropdown" v-show="selectOpen.s1">
+                    <div class="custom-select-option" :class="{ selected: !selectVals.s1 }" @click.stop="selectOption('s1', undefined)">全部</div>
+                    <div class="custom-select-option" :class="{ selected: selectVals.s1 === '启用' }" @click.stop="selectOption('s1', '启用')">启用</div>
+                    <div class="custom-select-option" :class="{ selected: selectVals.s1 === '禁用' }" @click.stop="selectOption('s1', '禁用')">禁用</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span>关键词</span>
+                <input class="demo-input" placeholder="请输入关键词" style="width:200px" />
+              </div>
+              <a-space>
+                <a-button type="primary">查询</a-button>
+                <a-button>重置</a-button>
+              </a-space>
+            </div>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('form1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.form1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.form1">
+            <pre>&lt;a-form layout="inline" :model="searchForm" class="search-form"&gt;
+  &lt;a-form-item label="状态"&gt;...&lt;/a-form-item&gt;
+  &lt;a-form-item label="关键词"&gt;
+    &lt;a-input v-model:value="searchForm.keyword" allow-clear /&gt;
+  &lt;/a-form-item&gt;
+  &lt;a-form-item&gt;
+    &lt;a-space&gt;
+      &lt;a-button type="primary"&gt;查询&lt;/a-button&gt;
+      &lt;a-button&gt;重置&lt;/a-button&gt;
+    &lt;/a-space&gt;
+  &lt;/a-form-item&gt;
+&lt;/a-form&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="input" class="section" ref="input">
+        <div class="section-title">Input 输入框</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-space align="center">
+              <input class="demo-input" placeholder="请输入" style="width:200px" />
+              <input class="demo-input" type="password" placeholder="密码输入" style="width:200px" />
+            </a-space>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('input1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.input1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.input1">
+            <pre>&lt;a-input v-model:value="value" placeholder="请输入" allow-clear /&gt;
+&lt;a-input-password v-model:value="pwd" placeholder="密码输入" /&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="select" class="section" ref="select">
+        <div class="section-title">Select 选择器</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-space>
+              <div class="custom-select" :class="{ active: selectOpen.s2 }" style="width:160px" @click.stop="toggleSelect('s2')">
+                <span :class="{ 'custom-select-placeholder': !selectVals.s2 }">{{ selectVals.s2 || '请选择' }}</span>
+                <div class="custom-select-dropdown" v-show="selectOpen.s2">
+                  <div class="custom-select-option" :class="{ selected: selectVals.s2 === '选项一' }" @click.stop="selectOption('s2', '选项一')">选项一</div>
+                  <div class="custom-select-option" :class="{ selected: selectVals.s2 === '选项二' }" @click.stop="selectOption('s2', '选项二')">选项二</div>
+                  <div class="custom-select-option" :class="{ selected: selectVals.s2 === '选项三' }" @click.stop="selectOption('s2', '选项三')">选项三</div>
+                </div>
+              </div>
+              <div class="custom-select" :class="{ active: selectOpen.s3 }" style="width:200px" @click.stop="toggleSelect('s3')">
+                <span :class="{ 'custom-select-placeholder': !selectVals.s3.length }">{{ selectVals.s3.length ? selectVals.s3.join('，') : '多选' }}</span>
+                <div class="custom-select-dropdown" v-show="selectOpen.s3">
+                  <div class="custom-select-option" :class="{ selected: selectVals.s3.includes('语文') }" @click.stop="selectOption('s3', '语文')">语文</div>
+                  <div class="custom-select-option" :class="{ selected: selectVals.s3.includes('数学') }" @click.stop="selectOption('s3', '数学')">数学</div>
+                  <div class="custom-select-option" :class="{ selected: selectVals.s3.includes('英语') }" @click.stop="selectOption('s3', '英语')">英语</div>
+                  <div class="custom-select-option" :class="{ selected: selectVals.s3.includes('科学') }" @click.stop="selectOption('s3', '科学')">科学</div>
+                </div>
+              </div>
+            </a-space>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('select1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.select1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.select1">
+            <pre>&lt;a-select v-model:value="value" placeholder="请选择" allow-clear /&gt;
+&lt;a-select v-model:value="values" mode="multiple" placeholder="多选" allow-clear /&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="table" class="section" ref="table">
+        <div class="section-title">Table 表格</div>
+        <div class="section-desc">操作列必须固定右侧（fixed: 'right'），使用 &lt;a-space&gt; 横向紧凑排列。</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-table :columns="demo.tableColumns" :data-source="demo.tableData" size="small" :pagination="false" style="width: 100%">
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'status'">
+                  <a-tag :color="record.status === 'active' ? 'green' : 'red'">
+                    {{ record.status === 'active' ? '启用' : '禁用' }}
+                  </a-tag>
+                </template>
+                <template v-if="column.key === 'action'">
+                  <a-space size="small">
+                    <a-button type="link" size="small">编辑</a-button>
+                    <a-divider type="vertical" />
+                    <a-button type="link" size="small" danger>删除</a-button>
+                  </a-space>
+                </template>
+              </template>
+            </a-table>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('table1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.table1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.table1">
+            <pre>{ title: '操作', key: 'action', width: 140, fixed: 'right' }
+
+&lt;template v-if="column.key === 'action'"&gt;
+  &lt;a-space size="small"&gt;
+    &lt;a-button type="link" size="small"&gt;编辑&lt;/a-button&gt;
+    &lt;a-divider type="vertical" /&gt;
+    &lt;a-button type="link" size="small" danger&gt;删除&lt;/a-button&gt;
+  &lt;/a-space&gt;
+&lt;/template&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="card" class="section" ref="card">
+        <div class="section-title">Card 卡片</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-row :gutter="16">
+              <a-col :span="12">
+                <a-card title="默认卡片" size="small">
+                  <p>内容区域</p>
+                </a-card>
+              </a-col>
+              <a-col :span="12">
+                <a-card title="无边框卡片" :bordered="false" size="small">
+                  <p>内容区域</p>
+                </a-card>
+              </a-col>
+            </a-row>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('card1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.card1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.card1">
+            <pre>&lt;a-card title="默认卡片" size="small"&gt;...&lt;/a-card&gt;
+&lt;a-card title="无边框卡片" :bordered="false" size="small"&gt;...&lt;/a-card&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="modal" class="section" ref="modal">
+        <div class="section-title">Modal 弹窗</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <div style="border:1px solid #f0f0f0;border-radius:8px;max-width:360px;box-shadow:0 4px 12px rgba(0,0,0,.08)">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #f0f0f0">
+                <span style="font-weight:500">示例弹窗</span>
+                <span style="color:#8c8c8c;cursor:pointer">&#10005;</span>
+              </div>
+              <div style="padding:24px">
+                <p>弹窗内容区域</p>
+              </div>
+              <div style="display:flex;justify-content:flex-end;gap:8px;padding:10px 24px;border-top:1px solid #f0f0f0">
+                <span style="padding:4px 15px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px">取 消</span>
+                <span style="padding:4px 15px;background:#1890ff;color:#fff;border-radius:6px;font-size:14px">确 定</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('modal1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.modal1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.modal1">
+            <pre>&lt;a-modal v-model:open="visible" title="示例弹窗" @ok="handleOk"&gt;
+  &lt;p&gt;弹窗内容&lt;/p&gt;
+&lt;/a-modal&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="status" class="section" ref="status">
+        <div class="section-title">Status 状态展示</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-space>
+              <a-tag color="green">成功</a-tag>
+              <a-tag color="red">失败</a-tag>
+              <a-tag color="orange">警告</a-tag>
+              <a-tag color="blue">信息</a-tag>
+              <a-badge :count="5" />
+              <a-badge status="processing" text="运行中" />
+            </a-space>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('status1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.status1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.status1">
+            <pre>&lt;a-tag color="green"&gt;成功&lt;/a-tag&gt;
+&lt;a-badge :count="5" /&gt;
+&lt;a-badge status="processing" text="运行中" /&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="icon" class="section" ref="icon">
+        <div class="section-title">Icon 图标</div>
+        <div class="section-desc">项目使用 <code>@ant-design/icons-vue</code> 图标组件，通过 <code>&lt;template #icon&gt;</code> 插槽传入按钮。以下展示已注册的常用图标名称与代码示例。</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <a-space wrap>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128269;</span>
+                <span>SearchOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128100;</span>
+                <span>UserOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128273;</span>
+                <span>KeyOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128200;</span>
+                <span>DashboardOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128101;</span>
+                <span>TeamOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#128214;</span>
+                <span>BookOutlined</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">&#9881;</span>
+                <span>SettingOutlined</span>
+              </div>
+            </a-space>
+          </div>
+          <div class="demo-divider"></div>
+          <div class="code-header" @click="toggleCode('icon1')">
+            <span class="code-title">查看代码</span>
+            <span class="code-toggle">{{ codeVisible.icon1 ? '收起' : '展开' }}</span>
+          </div>
+          <div class="code-block" v-if="codeVisible.icon1">
+            <pre>&lt;!-- 在 main.ts 中全局注册 --&gt;
+app.component('SearchOutlined', SearchOutlined);
+
+&lt;!-- 在模板中使用 --&gt;
+&lt;a-button type="primary"&gt;
+  &lt;template #icon&gt;&lt;SearchOutlined /&gt;&lt;/template&gt;
+  查询
+&lt;/a-button&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="styles" class="section" ref="styles">
+        <div class="section-title">Global Styles 全局样式</div>
+        <div class="section-desc">跨页面的 UI 修正统一放在 <code>frontend/src/styles/layout-override.css</code>。颜色与间距优先使用 <code>frontend/src/styles/design-system.css</code> 中的 CSS 变量。</div>
+        <div class="demo-card">
+          <div class="demo-block">
+            <table class="table-props">
+              <thead>
+                <tr><th>变量</th><th>值</th><th>用途</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><span class="tag-prop">--primary-500</span></td><td>#1890ff</td><td>品牌主色</td></tr>
+                <tr><td><span class="tag-prop">--success-500</span></td><td>#52c41a</td><td>成功</td></tr>
+                <tr><td><span class="tag-prop">--error-500</span></td><td>#f5222d</td><td>错误</td></tr>
+                <tr><td><span class="tag-prop">--text-primary</span></td><td>#262626</td><td>主要文本</td></tr>
+                <tr><td><span class="tag-prop">--text-secondary</span></td><td>#595959</td><td>次要文本</td></tr>
+                <tr><td><span class="tag-prop">--space-4</span></td><td>16px</td><td>常用间距</td></tr>
+                <tr><td><span class="tag-prop">--space-6</span></td><td>24px</td><td>页面/卡片间距</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createApp, ref, reactive, onMounted, onUnmounted, h } from 'https://esm.sh/vue@3.5.13/dist/vue.esm-browser.js';
+    import * as antd from 'https://esm.sh/ant-design-vue@4.2.6?bundle';
+
+    const app = createApp({
+      setup() {
+        const activeNav = ref('button');
+        const codeVisible = reactive({
+          btn1: false, btn2: false,
+          form1: false,
+          input1: false,
+          select1: false,
+          table1: false,
+          card1: false,
+          modal1: false,
+          status1: false,
+          icon1: false,
+        });
+
+        const navList = [
+          { id: 'button', name: 'Button 按钮' },
+          { id: 'search-form', name: 'Search Form 搜索表单' },
+          { id: 'input', name: 'Input 输入框' },
+          { id: 'select', name: 'Select 选择器' },
+          { id: 'table', name: 'Table 表格' },
+          { id: 'card', name: 'Card 卡片' },
+          { id: 'modal', name: 'Modal 弹窗' },
+          { id: 'status', name: 'Status 状态展示' },
+          { id: 'icon', name: 'Icon 图标' },
+          { id: 'styles', name: 'Global Styles 全局样式' },
+        ];
+
+        const demo = reactive({
+          search: { plan: undefined, status: undefined, keyword: '' },
+          input1: '', input2: '', input3: '',
+          select1: undefined, select2: undefined,
+          modalVisible: false,
+          tableColumns: [
+            { title: '名称', dataIndex: 'name', key: 'name' },
+            { title: '状态', key: 'status', width: 100 },
+            { title: '更新时间', dataIndex: 'updatedAt', key: 'updatedAt', width: 160 },
+            { title: '操作', key: 'action', width: 140, fixed: 'right' },
+          ],
+          tableData: [
+            { key: 1, name: '示例数据 A', status: 'active', updatedAt: '2026-04-10 10:00' },
+            { key: 2, name: '示例数据 B', status: 'inactive', updatedAt: '2026-04-09 16:30' },
+          ],
+        });
+
+        const selectOpen = reactive({ s1: false, s2: false, s3: false });
+        const selectVals = reactive({ s1: undefined, s2: undefined, s3: [] });
+
+        const toggleSelect = (key) => {
+          Object.keys(selectOpen).forEach(k => {
+            if (k !== key) selectOpen[k] = false;
+          });
+          selectOpen[key] = !selectOpen[key];
+        };
+
+        const selectOption = (key, val) => {
+          if (key === 's3') {
+            const arr = selectVals.s3;
+            const idx = arr.indexOf(val);
+            if (idx > -1) arr.splice(idx, 1);
+            else arr.push(val);
+          } else {
+            selectVals[key] = val;
+            selectOpen[key] = false;
+          }
+        };
+
+        const onDocClick = (e) => {
+          if (!e.target.closest('.custom-select')) {
+            Object.keys(selectOpen).forEach(k => selectOpen[k] = false);
+          }
+        };
+
+        const toggleCode = (key) => {
+          codeVisible[key] = !codeVisible[key];
+        };
+
+        const scrollTo = (id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+
+        const onScroll = () => {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          for (const item of navList) {
+            const el = document.getElementById(item.id);
+            if (el) {
+              const offsetTop = el.offsetTop - 100;
+              if (scrollTop >= offsetTop) {
+                activeNav.value = item.id;
+              }
+            }
+          }
+        };
+
+        onMounted(() => {
+          window.addEventListener('scroll', onScroll, { passive: true });
+          document.addEventListener('click', onDocClick);
+          onScroll();
+        });
+        onUnmounted(() => {
+          window.removeEventListener('scroll', onScroll);
+          document.removeEventListener('click', onDocClick);
+        });
+
+        return {
+          activeNav,
+          navList,
+          codeVisible,
+          demo,
+          selectOpen,
+          selectVals,
+          toggleSelect,
+          selectOption,
+          toggleCode,
+          scrollTo,
+        };
+      },
+    });
+
+    app.use(antd);
+    app.mount('#app');
+  </script>
+</body>
+</html>

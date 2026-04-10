@@ -50,17 +50,19 @@
               />
             </a-form-item>
           </a-col>
-          <a-col :xs="24" :sm="24" :md="8" style="text-align: right">
-            <a-space>
-              <a-button type="primary" @click="handleSearch">
-                <template #icon><SearchOutlined /></template>
-                查询
-              </a-button>
-              <a-button @click="resetFilters">
-                <template #icon><ReloadOutlined /></template>
-                重置
-              </a-button>
-            </a-space>
+          <a-col :xs="24" :sm="24" :md="8" class="form-actions-col">
+            <div class="form-actions">
+              <a-space>
+                <a-button type="primary" @click="handleSearch">
+                  <template #icon><SearchOutlined /></template>
+                  查询
+                </a-button>
+                <a-button @click="resetFilters">
+                  <template #icon><ReloadOutlined /></template>
+                  重置
+                </a-button>
+              </a-space>
+            </div>
           </a-col>
         </a-row>
       </a-form>
@@ -319,6 +321,33 @@ onMounted(() => {
   max-width: 1400px;
   margin: 0 auto;
 }
+
+.search-form :deep(.ant-form-item) {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.search-form :deep(.ant-form-item-label) {
+  flex-shrink: 0;
+  padding-right: 4px;
+}
+.search-form :deep(.ant-form-item-control) {
+  flex: 1;
+  min-width: 0;
+}
+.search-form .form-actions-col {
+  display: flex;
+  align-items: center;
+}
+.search-form .form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 32px;
+}
+
 .preview-container {
   padding: 16px;
   display: flex;

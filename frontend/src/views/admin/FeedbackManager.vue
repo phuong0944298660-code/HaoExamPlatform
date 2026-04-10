@@ -56,17 +56,19 @@
               />
             </a-form-item>
           </a-col>
-          <a-col :xs="24" :sm="12" :md="6" style="text-align: right">
-            <a-space>
-              <a-button type="primary" @click="handleSearch">
-                <template #icon><SearchOutlined /></template>
-                查询
-              </a-button>
-              <a-button @click="resetFilters">
-                <template #icon><ReloadOutlined /></template>
-                重置
-              </a-button>
-            </a-space>
+          <a-col :xs="24" :sm="12" :md="6" class="form-actions-col">
+            <div class="form-actions">
+              <a-space>
+                <a-button type="primary" @click="handleSearch">
+                  <template #icon><SearchOutlined /></template>
+                  查询
+                </a-button>
+                <a-button @click="resetFilters">
+                  <template #icon><ReloadOutlined /></template>
+                  重置
+                </a-button>
+              </a-space>
+            </div>
           </a-col>
         </a-row>
       </a-form>
@@ -415,6 +417,40 @@ onMounted(() => {
 
 .filter-card {
   margin-top: 16px;
+}
+
+.search-form {
+  :deep(.ant-form-item) {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  :deep(.ant-form-item-label) {
+    flex-shrink: 0;
+    padding-right: 4px;
+  }
+
+  :deep(.ant-form-item-control) {
+    flex: 1;
+    min-width: 0;
+  }
+
+
+
+  .form-actions-col {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    min-height: 32px;
+  }
 }
 
 .table-card {

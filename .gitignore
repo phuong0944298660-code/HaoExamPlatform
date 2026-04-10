@@ -57,3 +57,4 @@ target/
 *.class
 *.jar
 *.war
+e2e/test-results/

@@ -616,6 +616,24 @@ const columns = [
 
 ---
 
+## 🎨 UI/UX 设计开发规范（必读）
+
+在实现任何前端 UI 需求之前，必须首先阅读以下文档：
+
+1. **UI 设计与开发规范**：`docs/specs/UI_DESIGN_AND_DEVELOPMENT_GUIDELINES.md`
+2. **组件展示参考**：`docs/specs/ui-component-showcase.html`（可直接在浏览器打开）
+
+### 必须遵守的规则
+
+- **搜索表单统一高度**：所有管理后台搜索表单统一使用 `.search-form` 类。控件高度修正规则已全局定义在 `frontend/src/styles/layout-override.css`。禁止在单个 Vue 文件中重复写 `:deep(.ant-select), :deep(.ant-input) { height: 32px; }` 等覆盖。
+- **禁止样式重复**：如果多个页面需要相同的 Ant Design Vue 样式覆盖，优先提取到 `layout-override.css`，而不是复制粘贴 scoped 样式。
+- **颜色与间距**：优先使用 `frontend/src/styles/design-system.css` 中的 CSS 变量，避免硬编码颜色值。
+- **表格操作列**：必须固定右侧 `fixed: 'right'`，按钮使用 `<a-space>` 横向紧凑排列。
+
+### 变更流程
+
+若需求与现有规范不一致，必须先提醒用户，再统一修改规范文档，并同步更新所有涉及该组件的地方，确保一致性。
+
 ## 📌 重要API端点
 
 ### 核心考试流程

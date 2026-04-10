@@ -52,6 +52,30 @@
   width: 100% !important;
 }
 
+/* ==================== 搜索表单组件高度统一 ==================== */
+/*
+ * 修复：管理后台搜索表单中 a-select 与 a-input（含 allow-clear 的 affix-wrapper）
+ * 高度不一致问题。统一设置为 32px，与 ant-select 默认高度对齐。
+ * 覆盖范围：所有使用 .search-form 类的管理页面。
+ */
+.search-form .ant-select,
+.search-form .ant-input,
+.search-form .ant-picker,
+.search-form .ant-input-number,
+.search-form .ant-input-affix-wrapper {
+  height: 32px;
+}
+
+/* 当 a-input 内部嵌套在 affix-wrapper 时，重置内部 input 高度，
+   避免双重 padding 导致高度异常 */
+.search-form .ant-input-affix-wrapper .ant-input {
+  height: auto;
+}
+
+.search-form .ant-form-item-control-input {
+  min-height: auto;
+}
+
 /* 修复内容区域边距 */
 .admin-layout .content,
 .teacher-layout .content,

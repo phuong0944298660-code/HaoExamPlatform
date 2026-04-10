@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Parse Test 2</title>
+</head>
+<body>
+  <div id="app" class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Jieli UI</div>
+        <div class="sidebar-subtitle">接力教育 · 组件库文档</div>
+      </div>
+      <nav>
+        <div class="nav-group">
+          <div class="nav-group-title">组件</div>
+          <a v-for="item in navList" :key="item.id" :href="'#' + item.id"
+             :class="['nav-item', activeNav === item.id ? 'active' : '']"
+             @click.prevent="scrollTo(item.id)">
+            {{ item.name }}
+          </a>
+        </div>
+      </nav>
+    </aside>
+    <main class="main">
+      <p>Main content</p>
+    </main>
+  </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('TEST2 APP CHILDREN:', Array.from(document.getElementById('app').children).map(c => c.tagName));
+      console.log('TEST2 MAIN EXISTS:', !!document.querySelector('main'));
+    });
+  </script>
+</body>
+</html>
